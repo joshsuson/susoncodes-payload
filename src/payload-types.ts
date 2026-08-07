@@ -70,6 +70,7 @@ export interface Config {
     users: User;
     media: Media;
     posts: Post;
+    projects: Project;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -80,6 +81,7 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
+    projects: ProjectsSelect<false> | ProjectsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -193,6 +195,38 @@ export interface Post {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "projects".
+ */
+export interface Project {
+  id: number;
+  title: string;
+  pitch: string;
+  buildStatus: 'active' | 'shipped' | 'parked';
+  externalUrl?: string | null;
+  image?: (number | null) | Media;
+  /**
+   * Markdown
+   */
+  whatItIs?: string | null;
+  /**
+   * Markdown
+   */
+  thoughtProcess?: string | null;
+  /**
+   * Markdown
+   */
+  learnings?: string | null;
+  slug: string;
+  date: string;
+  metaTitle?: string | null;
+  metaDescription?: string | null;
+  metaImage?: (number | null) | Media;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -226,6 +260,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'posts';
         value: number | Post;
+      } | null)
+    | ({
+        relationTo: 'projects';
+        value: number | Project;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -319,6 +357,28 @@ export interface PostsSelect<T extends boolean = true> {
   content?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "projects_select".
+ */
+export interface ProjectsSelect<T extends boolean = true> {
+  title?: T;
+  pitch?: T;
+  buildStatus?: T;
+  externalUrl?: T;
+  image?: T;
+  whatItIs?: T;
+  thoughtProcess?: T;
+  learnings?: T;
+  slug?: T;
+  date?: T;
+  metaTitle?: T;
+  metaDescription?: T;
+  metaImage?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
