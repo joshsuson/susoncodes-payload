@@ -1,22 +1,40 @@
-import { getPayload } from 'payload'
-import React from 'react'
-
-import config from '@/payload.config'
-import { Button } from '@/components/ui/button'
+import { FauxPrompt } from '@/components/chat/FauxPrompt'
+import { getShell } from '@/lib/shell'
 
 export default async function HomePage() {
-  const payloadConfig = await config
-  const payload = await getPayload({ config: payloadConfig })
-
-  const homePage = await payload.findGlobal({
-    slug: 'homePage',
-  })
+  const shell = await getShell()
 
   return (
-    <div>
-      <h1 className="text-red-500 text-5xl">{homePage.heading}</h1>
-      <h2>{homePage.subheading}</h2>
-      <Button>This is a button</Button>
+    <div
+      className="mx-auto flex min-h-full w-full max-w-3xl flex-col px-4 md:px-8"
+      data-home-empty-state
+    >
+      <section
+        aria-labelledby="home-greeting"
+        className="flex flex-1 items-center justify-center py-14 md:py-20"
+      >
+        <div className="w-full text-center">
+          <h1
+            className="text-3xl font-medium tracking-tight text-shell-text md:text-4xl"
+            data-home-greeting
+            id="home-greeting"
+          >
+            {shell.homeHeading}
+          </h1>
+          <p className="mx-auto mt-4 max-w-xl text-sm leading-6 text-shell-faint md:text-base">
+            {shell.greetingSubtitle}
+          </p>
+          <FauxPrompt
+            aboutQuestion={shell.homeAboutQuestion}
+            buildingQuestion={shell.homeBuildingQuestion}
+            displayName={shell.displayName}
+            writtenQuestion={shell.homeWrittenQuestion}
+          />
+          <p className="mt-5 text-xs text-shell-faint">
+            Choose a suggested question to explore — this is not a live chat.
+          </p>
+        </div>
+      </section>
     </div>
   )
 }

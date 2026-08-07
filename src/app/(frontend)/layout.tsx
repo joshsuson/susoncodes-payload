@@ -1,18 +1,24 @@
-import React from 'react'
+import type { Metadata } from 'next'
+
+import { ChatShell } from '@/components/chat/ChatShell'
+import { getShell } from '@/lib/shell'
+
 import './globals.css'
 
-export const metadata = {
-  description: 'A blank template using Payload in a Next.js app.',
-  title: 'Payload Blank Template',
+export const dynamic = 'force-dynamic'
+
+export const metadata: Metadata = {
+  description: 'Projects and light writing from Josh Suson, routed by Josh Bot.',
+  title: 'Josh Bot',
 }
 
-export default async function RootLayout(props: { children: React.ReactNode }) {
-  const { children } = props
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const shell = await getShell()
 
   return (
     <html lang="en">
       <body>
-        <main>{children}</main>
+        <ChatShell shell={shell}>{children}</ChatShell>
       </body>
     </html>
   )

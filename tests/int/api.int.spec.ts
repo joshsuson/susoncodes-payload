@@ -2,6 +2,7 @@ import { getPayload, Payload } from 'payload'
 import config from '@/payload.config'
 import { findPublishedProjectBySlug, findPublishedProjects } from '@/lib/projects'
 import { findPublishedThoughtBySlug, findPublishedThoughts } from '@/lib/thoughts'
+import { seedGlobals } from '@/seed/globals'
 import { seedProjects } from '@/seed/projects'
 import { seedThoughts } from '@/seed/thoughts'
 
@@ -20,6 +21,90 @@ describe('Payload Local API', () => {
       collection: 'users',
     })
     expect(users).toBeDefined()
+  })
+
+  it('seeds public Shell and Site globals idempotently', async () => {
+    await seedGlobals(payload)
+    await seedGlobals(payload)
+
+    const shell = await payload.findGlobal({
+      slug: 'shell',
+      overrideAccess: false,
+    })
+    const site = await payload.findGlobal({
+      slug: 'site',
+      overrideAccess: false,
+    })
+
+    expect(shell).toMatchObject({
+      displayName: 'Josh Bot',
+      homeHeading: 'Where should we begin?',
+      homeBuildingQuestion: 'What are you building these days?',
+      homeWrittenQuestion: 'What have you written?',
+      homeAboutQuestion: 'Who is Josh?',
+      buildingSidebarLabel: 'What I’m building',
+      writtenSidebarLabel: 'What I’ve written',
+      aboutSidebarLabel: 'Who is Josh?',
+    })
+    expect(shell.aboutAssistantMessage).toContain('The fourth wall was load-bearing')
+    expect(typeof shell.profilePhoto === 'object' ? shell.profilePhoto.alt : null).toBe(
+      'Josh Suson',
+    )
+    expect(
+      site.socialLinks?.map(({ serviceName, text, url }) => ({ serviceName, text, url })),
+    ).toEqual([
+      {
+        serviceName: 'X',
+        url: 'https://x.com/joshsuson',
+        text: 'Follow on X',
+      },
+      {
+        serviceName: 'Github',
+        url: 'https://github.com/joshsuson',
+        text: 'Follow on Github',
+      },
+      {
+        serviceName: 'Linkedin',
+        url: 'https://www.linkedin.com/in/joshsuson',
+        text: 'Follow on Linkedin',
+      },
+    ])
+
+    const seededProfilePhotos = await payload.find({
+      collection: 'media',
+      overrideAccess: true,
+      where: {
+        alt: {
+          equals: 'Josh Suson',
+        },
+      },
+    })
+
+    expect(seededProfilePhotos.totalDocs).toBe(1)
+  })
+
+  it('rejects unauthenticated writes to Shell and Site globals', async () => {
+    await seedGlobals(payload)
+
+    await expect(
+      payload.updateGlobal({
+        slug: 'shell',
+        data: {
+          displayName: 'Definitely Fake Imposter Bot',
+        },
+        overrideAccess: false,
+      }),
+    ).rejects.toThrow()
+
+    await expect(
+      payload.updateGlobal({
+        slug: 'site',
+        data: {
+          socialLinks: [],
+        },
+        overrideAccess: false,
+      }),
+    ).rejects.toThrow()
   })
 
   it('creates a Thought with the required public shape', async () => {

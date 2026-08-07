@@ -69,7 +69,6 @@ export interface Config {
   collections: {
     users: User;
     media: Media;
-    posts: Post;
     projects: Project;
     thoughts: Thought;
     'payload-kv': PayloadKv;
@@ -81,7 +80,6 @@ export interface Config {
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
-    posts: PostsSelect<false> | PostsSelect<true>;
     projects: ProjectsSelect<false> | ProjectsSelect<true>;
     thoughts: ThoughtsSelect<false> | ThoughtsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
@@ -94,10 +92,12 @@ export interface Config {
   };
   fallbackLocale: null;
   globals: {
-    homePage: HomePage;
+    shell: Shell;
+    site: Site;
   };
   globalsSelect: {
-    homePage: HomePageSelect<false> | HomePageSelect<true>;
+    shell: ShellSelect<false> | ShellSelect<true>;
+    site: SiteSelect<false> | SiteSelect<true>;
   };
   locale: null;
   user: User & {
@@ -168,32 +168,6 @@ export interface Media {
   height?: number | null;
   focalX?: number | null;
   focalY?: number | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "posts".
- */
-export interface Post {
-  id: number;
-  title: string;
-  slug?: string | null;
-  content?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  updatedAt: string;
-  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -279,10 +253,6 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'media';
         value: number | Media;
-      } | null)
-    | ({
-        relationTo: 'posts';
-        value: number | Post;
       } | null)
     | ({
         relationTo: 'projects';
@@ -376,17 +346,6 @@ export interface MediaSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "posts_select".
- */
-export interface PostsSelect<T extends boolean = true> {
-  title?: T;
-  slug?: T;
-  content?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "projects_select".
  */
 export interface ProjectsSelect<T extends boolean = true> {
@@ -466,22 +425,85 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "homePage".
+ * via the `definition` "shell".
  */
-export interface HomePage {
+export interface Shell {
   id: number;
-  heading?: string | null;
-  subheading?: string | null;
+  displayName: string;
+  greetingSubtitle: string;
+  profilePhoto: number | Media;
+  homeHeading: string;
+  homeBuildingQuestion: string;
+  homeWrittenQuestion: string;
+  homeAboutQuestion: string;
+  buildingSidebarLabel: string;
+  buildingUserMessage: string;
+  buildingAssistantMessage: string;
+  writtenSidebarLabel: string;
+  writtenUserMessage: string;
+  writtenAssistantMessage: string;
+  aboutSidebarLabel: string;
+  aboutUserMessage: string;
+  /**
+   * Markdown
+   */
+  aboutAssistantMessage: string;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "homePage_select".
+ * via the `definition` "site".
  */
-export interface HomePageSelect<T extends boolean = true> {
-  heading?: T;
-  subheading?: T;
+export interface Site {
+  id: number;
+  socialLinks: {
+    serviceName: string;
+    url: string;
+    text: string;
+    id?: string | null;
+  }[];
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "shell_select".
+ */
+export interface ShellSelect<T extends boolean = true> {
+  displayName?: T;
+  greetingSubtitle?: T;
+  profilePhoto?: T;
+  homeHeading?: T;
+  homeBuildingQuestion?: T;
+  homeWrittenQuestion?: T;
+  homeAboutQuestion?: T;
+  buildingSidebarLabel?: T;
+  buildingUserMessage?: T;
+  buildingAssistantMessage?: T;
+  writtenSidebarLabel?: T;
+  writtenUserMessage?: T;
+  writtenAssistantMessage?: T;
+  aboutSidebarLabel?: T;
+  aboutUserMessage?: T;
+  aboutAssistantMessage?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site_select".
+ */
+export interface SiteSelect<T extends boolean = true> {
+  socialLinks?:
+    | T
+    | {
+        serviceName?: T;
+        url?: T;
+        text?: T;
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
