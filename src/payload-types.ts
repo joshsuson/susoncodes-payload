@@ -71,6 +71,7 @@ export interface Config {
     media: Media;
     posts: Post;
     projects: Project;
+    thoughts: Thought;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -82,6 +83,7 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
     projects: ProjectsSelect<false> | ProjectsSelect<true>;
+    thoughts: ThoughtsSelect<false> | ThoughtsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -227,6 +229,27 @@ export interface Project {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "thoughts".
+ */
+export interface Thought {
+  id: number;
+  title: string;
+  summary?: string | null;
+  /**
+   * Markdown
+   */
+  body: string;
+  slug: string;
+  date: string;
+  metaTitle?: string | null;
+  metaDescription?: string | null;
+  metaImage?: (number | null) | Media;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -264,6 +287,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'projects';
         value: number | Project;
+      } | null)
+    | ({
+        relationTo: 'thoughts';
+        value: number | Thought;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -371,6 +398,23 @@ export interface ProjectsSelect<T extends boolean = true> {
   whatItIs?: T;
   thoughtProcess?: T;
   learnings?: T;
+  slug?: T;
+  date?: T;
+  metaTitle?: T;
+  metaDescription?: T;
+  metaImage?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "thoughts_select".
+ */
+export interface ThoughtsSelect<T extends boolean = true> {
+  title?: T;
+  summary?: T;
+  body?: T;
   slug?: T;
   date?: T;
   metaTitle?: T;
