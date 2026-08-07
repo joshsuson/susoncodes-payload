@@ -1,6 +1,11 @@
 import { getPayload, Payload } from 'payload'
 import config from '@/payload.config'
-import { findPublishedProjectBySlug, findPublishedProjects } from '@/lib/projects'
+import {
+  findPublishedProjectBundle,
+  findPublishedProjectBySlug,
+  findPublishedProjects,
+  PROJECT_LIST_PAGE_SIZE,
+} from '@/lib/projects'
 import { findPublishedThoughtBySlug, findPublishedThoughts } from '@/lib/thoughts'
 import { seedGlobals } from '@/seed/globals'
 import { seedProjects } from '@/seed/projects'
@@ -196,6 +201,80 @@ describe('Payload Local API', () => {
     ).rejects.toThrow()
   })
 
+  it('pages published Projects into Building Thread bundles', async () => {
+    const fixtures = Array.from({ length: PROJECT_LIST_PAGE_SIZE + 2 }, (_, index) => ({
+      title: `Definitely Fake Bundle Project ${index + 1}`,
+      slug: `definitely-fake-bundle-project-${index + 1}`,
+      date: `2026-05-${String(index + 1).padStart(2, '0')}T00:00:00.000Z`,
+    }))
+
+    for (const project of fixtures) {
+      await payload.create({
+        collection: 'projects',
+        data: {
+          ...project,
+          pitch: 'Disposable Building Thread fixture.',
+          buildStatus: 'active',
+          _status: 'published',
+        },
+      })
+    }
+
+    await payload.create({
+      collection: 'projects',
+      data: {
+        title: 'Definitely Fake Bundle Draft Project',
+        pitch: 'Drafts stay out of Building Thread bundles.',
+        buildStatus: 'parked',
+        slug: 'definitely-fake-bundle-draft-project',
+        date: '2026-12-01T00:00:00.000Z',
+        _status: 'draft',
+      },
+      draft: true,
+    })
+
+    const firstPage = await findPublishedProjectBundle(payload, { offset: 0 })
+    const bundleTitles = firstPage.docs
+      .filter((project) => project.slug.startsWith('definitely-fake-bundle-project-'))
+      .map((project) => project.title)
+
+    expect(firstPage.docs).toHaveLength(PROJECT_LIST_PAGE_SIZE)
+    expect(bundleTitles).toEqual(
+      fixtures
+        .slice()
+        .reverse()
+        .slice(0, PROJECT_LIST_PAGE_SIZE)
+        .map((project) => project.title),
+    )
+    expect(firstPage.rangeStart).toBe(1)
+    expect(firstPage.rangeEnd).toBe(PROJECT_LIST_PAGE_SIZE)
+    expect(firstPage.hasMore).toBe(true)
+    expect(firstPage.nextOffset).toBe(PROJECT_LIST_PAGE_SIZE)
+    expect(firstPage.docs.map((project) => project.title)).not.toContain(
+      'Definitely Fake Bundle Draft Project',
+    )
+
+    const secondPage = await findPublishedProjectBundle(payload, {
+      offset: firstPage.nextOffset,
+    })
+    const secondBundleTitles = secondPage.docs
+      .filter((project) => project.slug.startsWith('definitely-fake-bundle-project-'))
+      .map((project) => project.title)
+
+    expect(secondBundleTitles.length).toBeGreaterThan(0)
+    expect(secondBundleTitles).toEqual(
+      fixtures
+        .slice()
+        .reverse()
+        .slice(PROJECT_LIST_PAGE_SIZE)
+        .map((project) => project.title),
+    )
+    expect(secondPage.rangeStart).toBe(PROJECT_LIST_PAGE_SIZE + 1)
+    expect(secondPage.docs.map((project) => project.title)).not.toContain(
+      'Definitely Fake Bundle Draft Project',
+    )
+  })
+
   it('lists only published Projects in newest-first order', async () => {
     const projects = [
       {
@@ -230,7 +309,7 @@ describe('Payload Local API', () => {
       })
     }
 
-    const result = await findPublishedProjects(payload)
+    const result = await findPublishedProjects(payload, { limit: 100 })
     const fixtureTitles = result.docs
       .filter((project) => project.slug.includes('-public-project'))
       .map((project) => project.title)
