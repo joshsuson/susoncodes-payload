@@ -13,6 +13,9 @@ import { Projects } from './collections/Projects'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
+const databaseUrl = process.env.DATABASE_URI || ''
+const pushDatabaseSchema =
+  process.env.PAYLOAD_DB_PUSH === 'true' || databaseUrl.startsWith('file:')
 
 export default buildConfig({
   admin: {
@@ -30,9 +33,12 @@ export default buildConfig({
   },
   db: sqliteAdapter({
     client: {
-      url: process.env.DATABASE_URI || '',
+      url: databaseUrl,
       authToken: process.env.DATABASE_AUTH_TOKEN || '',
     },
+    // Drizzle push mode races during Next development against remote libSQL databases.
+    // Keep local/test databases automatic; update remote schemas through `pnpm db:push`.
+    push: pushDatabaseSchema,
   }),
   sharp,
   plugins: [],

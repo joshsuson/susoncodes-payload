@@ -17,12 +17,23 @@ After you click the `Deploy` button above, you'll want to have standalone copy o
 ### Development
 
 1. First [clone the repo](#clone) if you have not done so already
-2. `cd my-project && cp .env.example .env` to copy the example environment variables. You'll need to add the `MONGODB_URI` from your Cloud project to your `.env` if you want to use S3 storage and the MongoDB database that was created for you.
-
+2. `cd my-project && cp .env.example .env` to copy the example environment variables. The example uses a local SQLite file. For Turso, replace `DATABASE_URI` with the `libsql://` URL and set `DATABASE_AUTH_TOKEN`.
 3. `pnpm install && pnpm dev` to install dependencies and start the dev server
 4. open `http://localhost:3000` to open the app in your browser
 
-That's it! Changes made in `./src` will be reflected in your app. Follow the on-screen instructions to login and create your first admin user. Then check out [Production](#production) once you're ready to build and serve your app, and [Deployment](#deployment) when you're ready to go live.
+### Database schema changes
+
+Local `file:` databases update automatically in development. Remote libSQL databases do not auto-push during `pnpm dev`, avoiding a known Drizzle race that can run the same schema statement concurrently.
+
+After changing Payload collections or globals for a remote development database, stop the dev server and run:
+
+```bash
+pnpm db:push
+```
+
+Then restart `pnpm dev`. Use Payload migrations rather than push mode for production schema changes.
+
+That's it! Changes made in `./src` will be reflected in your app. Follow the on-screen instructions to log in and create your first admin user.
 
 #### Docker (Optional)
 
