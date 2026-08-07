@@ -33,15 +33,15 @@ export function ProjectCard({ project }: ProjectCardProps) {
       </div>
       {project.externalUrl ? (
         <p className="mt-3">
-          <a
+          <Link
             className="text-xs font-medium text-shell-accent hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-shell-accent"
             data-external-link
             href={project.externalUrl}
             rel="noopener noreferrer"
             target="_blank"
           >
-            Open live artifact
-          </a>
+            Visit Project
+          </Link>
         </p>
       ) : null}
     </article>
