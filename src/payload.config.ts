@@ -15,8 +15,7 @@ import { Site } from './globals/Site'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 const databaseUrl = process.env.DATABASE_URI || ''
-const pushDatabaseSchema =
-  process.env.PAYLOAD_DB_PUSH === 'true' || databaseUrl.startsWith('file:')
+const pushDatabaseSchema = process.env.PAYLOAD_DB_PUSH === 'true' || databaseUrl.startsWith('file:')
 
 export default buildConfig({
   admin: {
