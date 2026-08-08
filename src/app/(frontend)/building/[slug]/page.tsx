@@ -1,10 +1,13 @@
 import { getPayload } from 'payload'
+import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
-import config from '@/payload.config'
+import { ArtifactBreadcrumb } from '@/components/artifact/ArtifactBreadcrumb'
 import { Markdown } from '@/components/Markdown'
 import { findPublishedProjectBySlug } from '@/lib/projects'
+import type { Media } from '@/payload-types'
+import config from '@/payload.config'
 
 const dateFormatter = new Intl.DateTimeFormat('en-US', {
   day: 'numeric',
@@ -26,48 +29,99 @@ export default async function ProjectArtifactPage({ params }: ProjectArtifactPag
 
   if (!project) notFound()
 
+  const image =
+    typeof project.image === 'object' && project.image !== null ? (project.image as Media) : null
+
   const sections = [
-    { heading: 'What it is', markdown: project.whatItIs },
-    { heading: 'Thought process', markdown: project.thoughtProcess },
-    { heading: 'Learnings', markdown: project.learnings },
-  ].filter((section): section is { heading: string; markdown: string } => Boolean(section.markdown))
+    { heading: 'What it is', key: 'what', markdown: project.whatItIs },
+    { heading: 'Thought process', key: 'thought-process', markdown: project.thoughtProcess },
+    { heading: 'Learnings', key: 'learnings', markdown: project.learnings },
+  ].filter((section): section is { heading: string; key: string; markdown: string } =>
+    Boolean(section.markdown),
+  )
 
   return (
-    <article className="mx-auto max-w-3xl px-6 py-16" data-project-artifact>
-      <header>
-        <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
-          <time dateTime={project.date}>{dateFormatter.format(new Date(project.date))}</time>
-          <span aria-hidden="true">·</span>
-          <span className="capitalize" data-build-status={project.buildStatus}>
-            {project.buildStatus}
-          </span>
-        </div>
-        <h1 className="mt-5 text-4xl font-semibold tracking-tight">{project.title}</h1>
-        <p className="mt-5 text-lg leading-8 text-muted-foreground">{project.pitch}</p>
-        {project.externalUrl ? (
-          <Link
-            className="mt-7 inline-flex rounded-full bg-foreground px-4 py-2 text-sm font-medium text-background"
-            href={project.externalUrl}
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            Visit Project <span aria-hidden="true">↗</span>
-          </Link>
-        ) : null}
-      </header>
+    <div className="min-h-full" data-project-artifact data-project-detail data-project-slug={slug}>
+      <ArtifactBreadcrumb
+        archive="projects"
+        href="/projects"
+        label="Projects"
+        title={project.title}
+      />
 
-      {sections.length > 0 ? (
-        <div className="mt-14 space-y-12">
-          {sections.map((section) => (
-            <section className="border-t pt-8" key={section.heading}>
-              <h2 className="text-2xl font-semibold tracking-tight">{section.heading}</h2>
-              <div className="mt-4 space-y-4 leading-7 text-muted-foreground">
-                <Markdown>{section.markdown}</Markdown>
-              </div>
-            </section>
-          ))}
-        </div>
-      ) : null}
-    </article>
+      <article className="mx-auto w-full max-w-5xl px-4 py-10 md:px-8 md:py-16">
+        <header className="mx-auto max-w-3xl">
+          <div className="flex flex-wrap items-center gap-3 text-xs font-medium tracking-wide text-shell-faint">
+            <span className="uppercase">Project</span>
+            <span aria-hidden="true">·</span>
+            <time dateTime={project.date.slice(0, 10)}>
+              {dateFormatter.format(new Date(project.date))}
+            </time>
+            <span
+              className="rounded-full border border-shell-border px-2.5 py-1 uppercase"
+              data-build-status={project.buildStatus}
+            >
+              {project.buildStatus}
+            </span>
+          </div>
+
+          <h1 className="mt-5 text-4xl font-semibold tracking-tight text-shell-text md:text-6xl">
+            {project.title}
+          </h1>
+
+          <p className="mt-5 max-w-2xl text-lg leading-relaxed text-shell-muted md:text-xl">
+            {project.pitch}
+          </p>
+
+          {project.externalUrl ? (
+            <p className="mt-7">
+              <Link
+                className="inline-flex items-center gap-2 rounded-full bg-shell-text px-4 py-2 text-sm font-medium text-shell-canvas transition-opacity hover:opacity-85 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-shell-accent"
+                data-external-link
+                href={project.externalUrl}
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                Visit Project
+                <span aria-hidden="true">↗</span>
+                <span className="sr-only">(opens in a new tab)</span>
+              </Link>
+            </p>
+          ) : null}
+        </header>
+
+        {image?.url ? (
+          <figure className="mt-10 overflow-hidden rounded-2xl border border-shell-border bg-shell-panel md:mt-14">
+            <Image
+              alt={image.alt || project.title}
+              className="h-auto w-full object-cover"
+              data-project-image
+              height={image.height ?? 720}
+              src={image.url}
+              width={image.width ?? 1280}
+            />
+          </figure>
+        ) : null}
+
+        {sections.length > 0 ? (
+          <div className="mx-auto mt-12 max-w-3xl space-y-12 md:mt-16">
+            {sections.map((section) => (
+              <section
+                className="border-t border-shell-border pt-8"
+                data-project-section={section.key}
+                key={section.key}
+              >
+                <h2 className="text-2xl font-semibold tracking-tight text-shell-text">
+                  {section.heading}
+                </h2>
+                <div className="mt-4 space-y-4 text-base leading-relaxed text-shell-muted [&_a]:text-shell-accent [&_h1]:text-shell-text [&_h2]:text-shell-text [&_h3]:text-shell-text [&_strong]:text-shell-text">
+                  <Markdown>{section.markdown}</Markdown>
+                </div>
+              </section>
+            ))}
+          </div>
+        ) : null}
+      </article>
+    </div>
   )
 }
