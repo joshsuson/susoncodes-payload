@@ -1,14 +1,13 @@
-import { ThreadMessages } from '@/components/chat/ThreadMessages'
-import { Markdown } from '@/components/Markdown'
+import { AboutThread } from '@/components/chat/AboutThread'
 import { getShell } from '@/lib/shell'
 
 export default async function AboutThreadPage() {
   const shell = await getShell()
 
   return (
-    <ThreadMessages
-      assistantMessage={<Markdown>{shell.aboutAssistantMessage}</Markdown>}
-      title="About"
+    <AboutThread
+      assistantMessage={shell.aboutAssistantMessage}
+      displayName={shell.displayName}
       userMessage={shell.aboutUserMessage}
     />
   )
