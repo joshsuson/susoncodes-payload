@@ -1,8 +1,11 @@
+import type { Metadata } from 'next'
 import { getPayload } from 'payload'
 import { notFound } from 'next/navigation'
 
 import { ArtifactBreadcrumb } from '@/components/artifact/ArtifactBreadcrumb'
 import { Markdown } from '@/components/Markdown'
+import { getShell } from '@/lib/shell'
+import { buildPageMetadata } from '@/lib/seo'
 import { findPublishedThoughtBySlug } from '@/lib/thoughts'
 import config from '@/payload.config'
 
@@ -17,6 +20,31 @@ type ThoughtArtifactPageProps = {
   params: Promise<{
     slug: string
   }>
+}
+
+export async function generateMetadata({ params }: ThoughtArtifactPageProps): Promise<Metadata> {
+  const { slug } = await params
+  const payload = await getPayload({ config })
+  const [shell, thought] = await Promise.all([
+    getShell(),
+    findPublishedThoughtBySlug(payload, slug),
+  ])
+
+  if (!thought) {
+    return buildPageMetadata({
+      shell,
+      title: 'Thought not found',
+    })
+  }
+
+  return buildPageMetadata({
+    descriptionFallback: thought.summary,
+    metaDescription: thought.metaDescription,
+    metaImage: thought.metaImage,
+    metaTitle: thought.metaTitle,
+    shell,
+    title: thought.title,
+  })
 }
 
 export default async function ThoughtArtifactPage({ params }: ThoughtArtifactPageProps) {

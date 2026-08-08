@@ -1,5 +1,19 @@
+import type { Metadata } from 'next'
+
 import { FauxPrompt } from '@/components/chat/FauxPrompt'
 import { getShell } from '@/lib/shell'
+import { buildPageMetadata } from '@/lib/seo'
+
+export async function generateMetadata(): Promise<Metadata> {
+  const shell = await getShell()
+
+  return buildPageMetadata({
+    descriptionFallback: shell.greetingSubtitle,
+    imageFallback: shell.profilePhoto,
+    shell,
+    title: shell.homeHeading || shell.displayName || 'Josh Bot',
+  })
+}
 
 export default async function HomePage() {
   const shell = await getShell()

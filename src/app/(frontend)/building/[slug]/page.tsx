@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { getPayload } from 'payload'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -6,6 +7,8 @@ import { notFound } from 'next/navigation'
 import { ArtifactBreadcrumb } from '@/components/artifact/ArtifactBreadcrumb'
 import { Markdown } from '@/components/Markdown'
 import { findPublishedProjectBySlug } from '@/lib/projects'
+import { getShell } from '@/lib/shell'
+import { buildPageMetadata } from '@/lib/seo'
 import type { Media } from '@/payload-types'
 import config from '@/payload.config'
 
@@ -20,6 +23,32 @@ type ProjectArtifactPageProps = {
   params: Promise<{
     slug: string
   }>
+}
+
+export async function generateMetadata({ params }: ProjectArtifactPageProps): Promise<Metadata> {
+  const { slug } = await params
+  const payload = await getPayload({ config })
+  const [shell, project] = await Promise.all([
+    getShell(),
+    findPublishedProjectBySlug(payload, slug),
+  ])
+
+  if (!project) {
+    return buildPageMetadata({
+      shell,
+      title: 'Project not found',
+    })
+  }
+
+  return buildPageMetadata({
+    descriptionFallback: project.pitch,
+    imageFallback: project.image,
+    metaDescription: project.metaDescription,
+    metaImage: project.metaImage,
+    metaTitle: project.metaTitle,
+    shell,
+    title: project.title,
+  })
 }
 
 export default async function ProjectArtifactPage({ params }: ProjectArtifactPageProps) {

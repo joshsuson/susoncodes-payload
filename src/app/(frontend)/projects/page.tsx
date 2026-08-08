@@ -1,11 +1,25 @@
+import type { Metadata } from 'next'
 import { getPayload } from 'payload'
 
 import { ArchiveLibrary } from '@/components/archive/ArchiveLibrary'
 import { findPublishedProjects } from '@/lib/projects'
+import { getShell } from '@/lib/shell'
+import { buildPageMetadata } from '@/lib/seo'
 import type { Media } from '@/payload-types'
 import config from '@/payload.config'
 
 export const dynamic = 'force-dynamic'
+
+export async function generateMetadata(): Promise<Metadata> {
+  const shell = await getShell()
+
+  return buildPageMetadata({
+    descriptionFallback: shell.buildingAssistantMessage,
+    imageFallback: shell.profilePhoto,
+    shell,
+    title: 'Projects',
+  })
+}
 
 const ARCHIVE_LIMIT = 100
 

@@ -11,7 +11,7 @@ test.describe('Chat Shell Home', () => {
     const response = await page.goto('/')
 
     expect(response?.ok()).toBe(true)
-    await expect(page).toHaveTitle(/Josh Bot/)
+    await expect(page).toHaveTitle(/Where should we begin\?/)
     await expect(page.locator('[data-chat-shell]')).toBeVisible()
     await expect(page.locator('[data-sidebar]')).toBeVisible()
     await expect(page.locator('[data-message-column]')).toBeVisible()
