@@ -6,7 +6,12 @@ import {
   findPublishedProjects,
   PROJECT_LIST_PAGE_SIZE,
 } from '@/lib/projects'
-import { findPublishedThoughtBySlug, findPublishedThoughts } from '@/lib/thoughts'
+import {
+  findPublishedThoughtBundle,
+  findPublishedThoughtBySlug,
+  findPublishedThoughts,
+  THOUGHT_LIST_PAGE_SIZE,
+} from '@/lib/thoughts'
 import { seedGlobals } from '@/seed/globals'
 import { seedProjects } from '@/seed/projects'
 import { seedThoughts } from '@/seed/thoughts'
@@ -323,6 +328,79 @@ describe('Payload Local API', () => {
     )
   })
 
+  it('pages published Thoughts into Written Thread bundles', async () => {
+    const fixtures = Array.from({ length: THOUGHT_LIST_PAGE_SIZE + 2 }, (_, index) => ({
+      title: `Definitely Fake Bundle Thought ${index + 1}`,
+      slug: `definitely-fake-bundle-thought-${index + 1}`,
+      date: `2026-04-${String(index + 1).padStart(2, '0')}T00:00:00.000Z`,
+    }))
+
+    for (const thought of fixtures) {
+      await payload.create({
+        collection: 'thoughts',
+        data: {
+          ...thought,
+          body: 'Disposable Written Thread fixture.',
+          summary: 'A disposable Thought summary.',
+          _status: 'published',
+        },
+      })
+    }
+
+    await payload.create({
+      collection: 'thoughts',
+      data: {
+        title: 'Definitely Fake Bundle Draft Thought',
+        body: 'Drafts stay out of Written Thread bundles.',
+        slug: 'definitely-fake-bundle-draft-thought',
+        date: '2026-12-01T00:00:00.000Z',
+        _status: 'draft',
+      },
+      draft: true,
+    })
+
+    const firstPage = await findPublishedThoughtBundle(payload, { offset: 0 })
+    const bundleTitles = firstPage.docs
+      .filter((thought) => thought.slug.startsWith('definitely-fake-bundle-thought-'))
+      .map((thought) => thought.title)
+
+    expect(firstPage.docs).toHaveLength(THOUGHT_LIST_PAGE_SIZE)
+    expect(bundleTitles).toEqual(
+      fixtures
+        .slice()
+        .reverse()
+        .slice(0, THOUGHT_LIST_PAGE_SIZE)
+        .map((thought) => thought.title),
+    )
+    expect(firstPage.rangeStart).toBe(1)
+    expect(firstPage.rangeEnd).toBe(THOUGHT_LIST_PAGE_SIZE)
+    expect(firstPage.hasMore).toBe(true)
+    expect(firstPage.nextOffset).toBe(THOUGHT_LIST_PAGE_SIZE)
+    expect(firstPage.docs.map((thought) => thought.title)).not.toContain(
+      'Definitely Fake Bundle Draft Thought',
+    )
+
+    const secondPage = await findPublishedThoughtBundle(payload, {
+      offset: firstPage.nextOffset,
+    })
+    const secondBundleTitles = secondPage.docs
+      .filter((thought) => thought.slug.startsWith('definitely-fake-bundle-thought-'))
+      .map((thought) => thought.title)
+
+    expect(secondBundleTitles.length).toBeGreaterThan(0)
+    expect(secondBundleTitles).toEqual(
+      fixtures
+        .slice()
+        .reverse()
+        .slice(THOUGHT_LIST_PAGE_SIZE)
+        .map((thought) => thought.title),
+    )
+    expect(secondPage.rangeStart).toBe(THOUGHT_LIST_PAGE_SIZE + 1)
+    expect(secondPage.docs.map((thought) => thought.title)).not.toContain(
+      'Definitely Fake Bundle Draft Thought',
+    )
+  })
+
   it('lists only published Thoughts in newest-first order', async () => {
     const thoughts = [
       {
@@ -356,7 +434,7 @@ describe('Payload Local API', () => {
       })
     }
 
-    const result = await findPublishedThoughts(payload)
+    const result = await findPublishedThoughts(payload, { limit: 100 })
     const fixtureTitles = result.docs
       .filter((thought) => thought.slug.includes('-public-thought'))
       .map((thought) => thought.title)
