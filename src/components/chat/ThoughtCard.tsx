@@ -9,11 +9,11 @@ type ThoughtCardProps = {
 export function ThoughtCard({ thought }: ThoughtCardProps) {
   return (
     <article
-      className="rounded-2xl border border-shell-border bg-shell-elevated/50 p-4 transition hover:border-shell-accent/30"
+      className="border border-shell-border bg-shell-canvas/40 p-3 transition hover:border-shell-accent/40 hover:bg-shell-elevated/40"
       data-thought-card={thought.slug}
     >
       <div className="min-w-0 space-y-1">
-        <h3 className="text-sm font-semibold text-shell-text">
+        <h3 className="text-[13px] font-medium text-shell-text">
           <Link
             className="hover:text-shell-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-shell-accent"
             href={`/written/${thought.slug}`}
@@ -21,7 +21,9 @@ export function ThoughtCard({ thought }: ThoughtCardProps) {
             {thought.title}
           </Link>
         </h3>
-        {thought.summary ? <p className="text-sm text-shell-muted">{thought.summary}</p> : null}
+        {thought.summary ? (
+          <p className="text-[12px] leading-5 text-shell-muted">{thought.summary}</p>
+        ) : null}
       </div>
     </article>
   )

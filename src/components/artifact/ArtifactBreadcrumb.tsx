@@ -9,17 +9,17 @@ type ArtifactBreadcrumbProps = {
 
 export function ArtifactBreadcrumb({ archive, href, label, title }: ArtifactBreadcrumbProps) {
   return (
-    <div className="sticky top-0 z-10 border-b border-shell-border bg-shell-canvas/90 backdrop-blur-md">
+    <div className="sticky top-0 z-10 border-b border-shell-border bg-shell-canvas/95 backdrop-blur-sm">
       <nav
         aria-label="Breadcrumb"
-        className="mx-auto flex min-h-14 w-full max-w-5xl items-center gap-2 px-4 text-sm md:px-8"
+        className="mx-auto flex min-h-11 w-full max-w-5xl items-center gap-2 px-4 text-[13px] md:px-8"
         data-artifact-breadcrumb={archive}
       >
         <Link
-          className="-ml-2 inline-flex min-h-11 items-center rounded-lg px-2 text-shell-muted transition-colors hover:text-shell-text focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-shell-accent"
+          className="-ml-1 inline-flex min-h-9 items-center px-1 text-shell-muted transition-colors hover:text-shell-text focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-shell-accent"
           href={href}
         >
-          {label}
+          {label.toLowerCase()}
         </Link>
         <span aria-hidden="true" className="text-shell-faint">
           /

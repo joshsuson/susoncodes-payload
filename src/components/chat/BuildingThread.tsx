@@ -137,9 +137,9 @@ export function BuildingThread({
       </div>
 
       {hasMore ? (
-        <div className="pl-11" data-show-more-slot>
+        <div className="pl-0" data-show-more-slot>
           <button
-            className="rounded-full border border-shell-border bg-shell-panel px-3 py-1.5 text-xs text-shell-muted transition hover:border-shell-accent/40 hover:text-shell-text focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-shell-accent disabled:cursor-wait disabled:opacity-60"
+            className="border border-shell-border bg-shell-panel px-2.5 py-1.5 text-[11px] tracking-wide text-shell-muted uppercase transition hover:border-shell-accent/50 hover:text-shell-text focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-shell-accent disabled:cursor-wait disabled:opacity-60"
             data-show-more="true"
             disabled={loading}
             onClick={showMore}

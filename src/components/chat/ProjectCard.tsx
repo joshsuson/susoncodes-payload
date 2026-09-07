@@ -9,12 +9,12 @@ type ProjectCardProps = {
 export function ProjectCard({ project }: ProjectCardProps) {
   return (
     <article
-      className="rounded-2xl border border-shell-border bg-shell-elevated/50 p-4 transition hover:border-shell-accent/30"
+      className="border border-shell-border bg-shell-canvas/40 p-3 transition hover:border-shell-accent/40 hover:bg-shell-elevated/40"
       data-project-card={project.slug}
     >
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 space-y-1">
-          <h3 className="text-sm font-semibold text-shell-text">
+          <h3 className="text-[13px] font-medium text-shell-text">
             <Link
               className="hover:text-shell-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-shell-accent"
               href={`/building/${project.slug}`}
@@ -22,25 +22,22 @@ export function ProjectCard({ project }: ProjectCardProps) {
               {project.title}
             </Link>
           </h3>
-          <p className="text-sm text-shell-muted">{project.pitch}</p>
+          <p className="text-[12px] leading-5 text-shell-muted">{project.pitch}</p>
         </div>
-        <span
-          className="shrink-0 rounded-full border border-shell-border px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-shell-faint"
-          data-build-status={project.buildStatus}
-        >
+        <span className="shell-chip shrink-0" data-build-status={project.buildStatus}>
           {project.buildStatus}
         </span>
       </div>
       {project.externalUrl ? (
-        <p className="mt-3">
+        <p className="mt-2.5">
           <Link
-            className="text-xs font-medium text-shell-accent hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-shell-accent"
+            className="text-[11px] text-shell-accent hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-shell-accent"
             data-external-link
             href={project.externalUrl}
             rel="noopener noreferrer"
             target="_blank"
           >
-            Visit Project
+            visit project ↗
           </Link>
         </p>
       ) : null}

@@ -80,21 +80,18 @@ export default async function ProjectArtifactPage({ params }: ProjectArtifactPag
 
       <article className="mx-auto w-full max-w-5xl px-4 py-10 md:px-8 md:py-16">
         <header className="mx-auto max-w-3xl">
-          <div className="flex flex-wrap items-center gap-3 text-xs font-medium tracking-wide text-shell-faint">
-            <span className="uppercase">Project</span>
+          <div className="flex flex-wrap items-center gap-3 text-shell-faint">
+            <span className="shell-label">project</span>
             <span aria-hidden="true">·</span>
             <time dateTime={project.date.slice(0, 10)}>
               {dateFormatter.format(new Date(project.date))}
             </time>
-            <span
-              className="rounded-full border border-shell-border px-2.5 py-1 uppercase"
-              data-build-status={project.buildStatus}
-            >
+            <span className="shell-chip" data-build-status={project.buildStatus}>
               {project.buildStatus}
             </span>
           </div>
 
-          <h1 className="mt-5 text-4xl font-semibold tracking-tight text-shell-text md:text-6xl">
+          <h1 className="mt-4 text-3xl font-medium tracking-tight text-shell-text md:text-5xl">
             {project.title}
           </h1>
 
@@ -105,7 +102,7 @@ export default async function ProjectArtifactPage({ params }: ProjectArtifactPag
           {project.externalUrl ? (
             <p className="mt-7">
               <Link
-                className="inline-flex items-center gap-2 rounded-full bg-shell-text px-4 py-2 text-sm font-medium text-shell-canvas transition-opacity hover:opacity-85 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-shell-accent"
+                className="inline-flex items-center gap-2 border border-shell-text bg-shell-text px-3 py-1.5 text-[12px] font-medium tracking-wide text-shell-canvas uppercase transition-opacity hover:opacity-85 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-shell-accent"
                 data-external-link
                 href={project.externalUrl}
                 rel="noopener noreferrer"
@@ -120,7 +117,7 @@ export default async function ProjectArtifactPage({ params }: ProjectArtifactPag
         </header>
 
         {image?.url ? (
-          <figure className="mt-10 overflow-hidden rounded-2xl border border-shell-border bg-shell-panel md:mt-14">
+          <figure className="mt-10 overflow-hidden border border-shell-border bg-shell-panel md:mt-14">
             <Image
               alt={image.alt || project.title}
               className="h-auto w-full object-cover"
@@ -140,7 +137,7 @@ export default async function ProjectArtifactPage({ params }: ProjectArtifactPag
                 data-project-section={section.key}
                 key={section.key}
               >
-                <h2 className="text-2xl font-semibold tracking-tight text-shell-text">
+                <h2 className="text-lg font-medium tracking-tight text-shell-text">
                   {section.heading}
                 </h2>
                 <div className="mt-4 space-y-4 text-base leading-relaxed text-shell-muted [&_a]:text-shell-accent [&_h1]:text-shell-text [&_h2]:text-shell-text [&_h3]:text-shell-text [&_strong]:text-shell-text">

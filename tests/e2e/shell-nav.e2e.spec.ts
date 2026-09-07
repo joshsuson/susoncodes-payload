@@ -23,7 +23,7 @@ test.describe('Chat Shell navigation and SEO', () => {
       'page',
     )
     await expect(page.locator('[data-sidebar] [data-sidebar-thread="building"]')).toContainText(
-      'What I’m building',
+      'What are you building these days?',
     )
 
     await page.locator('[data-sidebar] [data-nav="written"]').click()

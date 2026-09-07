@@ -65,15 +65,15 @@ export default async function ThoughtArtifactPage({ params }: ThoughtArtifactPag
 
       <article className="mx-auto w-full max-w-3xl px-4 py-10 md:px-8 md:py-16">
         <header>
-          <div className="flex flex-wrap items-center gap-3 text-xs font-medium tracking-wide text-shell-faint">
-            <span className="uppercase">Thought</span>
+          <div className="flex flex-wrap items-center gap-3 text-shell-faint">
+            <span className="shell-label">thought</span>
             <span aria-hidden="true">·</span>
             <time dateTime={thought.date.slice(0, 10)}>
               {dateFormatter.format(new Date(thought.date))}
             </time>
           </div>
 
-          <h1 className="mt-5 text-4xl font-semibold tracking-tight text-shell-text md:text-6xl">
+          <h1 className="mt-4 text-3xl font-medium tracking-tight text-shell-text md:text-5xl">
             {thought.title}
           </h1>
 
