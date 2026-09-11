@@ -40,6 +40,11 @@ next-env.d.ts
 
 .env
 
+# local SQLite database (created by dev/seed scripts)
+/payload.db
+/payload.db-shm
+/payload.db-wal
+
 /media
 
 # Playwright

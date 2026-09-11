@@ -1,0 +1,17 @@
+{
+  "name": "Susoncodes (Payload + Next.js)",
+  "install": "bash .cursor/install.sh",
+  "terminals": [
+    {
+      "name": "dev",
+      "command": "COREPACK_ENABLE_DOWNLOAD_PROMPT=0 pnpm dev",
+      "description": "Next.js + Payload dev server on http://localhost:3000 (admin at /admin)."
+    }
+  ],
+  "ports": [
+    {
+      "name": "web",
+      "port": 3000
+    }
+  ]
+}
