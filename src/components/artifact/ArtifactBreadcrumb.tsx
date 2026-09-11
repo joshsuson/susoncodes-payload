@@ -9,14 +9,15 @@ type ArtifactBreadcrumbProps = {
 
 export function ArtifactBreadcrumb({ archive, href, label, title }: ArtifactBreadcrumbProps) {
   return (
-    <div className="sticky top-0 z-10 border-b border-shell-border bg-shell-canvas/95 backdrop-blur-sm">
+    // h-12 matches ChatShell sidebar topbar so the shared border line meets cleanly.
+    <div className="sticky top-0 z-10 h-12 border-b border-shell-border bg-shell-canvas/95 backdrop-blur-sm">
       <nav
         aria-label="Breadcrumb"
-        className="mx-auto flex min-h-11 w-full max-w-5xl items-center gap-2 px-4 text-[13px] md:px-8"
+        className="mx-auto flex h-full w-full max-w-5xl items-center gap-2 px-4 text-[13px] md:px-8"
         data-artifact-breadcrumb={archive}
       >
         <Link
-          className="-ml-1 inline-flex min-h-9 items-center px-1 text-shell-muted transition-colors hover:text-shell-text focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-shell-accent"
+          className="-ml-1 inline-flex items-center px-1 text-shell-muted transition-colors hover:text-shell-text focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-shell-accent"
           href={href}
         >
           {label.toLowerCase()}

@@ -36,66 +36,14 @@ export function ArchiveLibrary({ emptyLabel, items, title, type }: ArchiveLibrar
       className="mx-auto w-full max-w-6xl px-4 py-8 md:px-8 md:py-12"
       data-content-library={type}
     >
-      <header className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
-        <div>
-          <p className="shell-label">secondary view</p>
-          <h1 className="mt-2 text-2xl font-medium tracking-tight text-shell-text md:text-3xl">
-            {title.toLowerCase()}
-          </h1>
-        </div>
-
-        <div
-          aria-hidden="true"
-          className="flex w-full flex-col gap-2 select-none sm:flex-row lg:w-auto"
-          data-archive-controls="visual-only"
-        >
-          <div className="flex min-h-10 min-w-0 flex-1 items-center gap-2 border border-shell-border bg-shell-elevated px-3 text-shell-faint sm:w-72">
-            <span className="text-shell-accent" aria-hidden="true">
-              /
-            </span>
-            <span className="truncate text-[13px]">search</span>
-          </div>
-
-          <span className="flex min-h-10 items-center justify-center border border-shell-text bg-shell-text px-4 text-[12px] font-medium tracking-wide text-shell-canvas uppercase opacity-90">
-            new ▾
-          </span>
-        </div>
+      <header>
+        <p className="shell-label">secondary view</p>
+        <h1 className="mt-2 text-2xl font-medium tracking-tight text-shell-text md:text-3xl">
+          {title.toLowerCase()}
+        </h1>
       </header>
 
-      <div
-        aria-hidden="true"
-        className="mt-10 flex flex-col gap-3 border-b border-shell-border pb-3 select-none sm:flex-row sm:items-center sm:justify-between"
-      >
-        <div className="flex flex-wrap gap-1">
-          <span className="border border-shell-border bg-shell-elevated px-2.5 py-1 text-[11px] tracking-wide text-shell-text uppercase">
-            all
-          </span>
-          {type === 'projects' ? (
-            <>
-              <span className="px-2.5 py-1 text-[11px] tracking-wide text-shell-muted uppercase">
-                active
-              </span>
-              <span className="px-2.5 py-1 text-[11px] tracking-wide text-shell-muted uppercase">
-                shipped
-              </span>
-              <span className="px-2.5 py-1 text-[11px] tracking-wide text-shell-muted uppercase">
-                parked
-              </span>
-            </>
-          ) : (
-            <>
-              <span className="px-2.5 py-1 text-[11px] tracking-wide text-shell-muted uppercase">
-                recent
-              </span>
-              <span className="px-2.5 py-1 text-[11px] tracking-wide text-shell-muted uppercase">
-                archive
-              </span>
-            </>
-          )}
-        </div>
-      </div>
-
-      <div className="mt-2">
+      <div className="mt-8">
         <div className="hidden grid-cols-[minmax(0,1fr)_10rem_8rem_2rem] gap-4 border-b border-shell-border px-3 py-2 text-[11px] tracking-wide text-shell-faint uppercase md:grid">
           <span>name</span>
           <span>modified</span>
