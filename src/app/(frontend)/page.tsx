@@ -28,7 +28,6 @@ export default async function HomePage() {
         className="flex flex-1 items-center justify-center py-14 md:py-20"
       >
         <div className="w-full text-left md:text-center">
-          <p className="shell-label mb-3 md:justify-center">session // home</p>
           <h1
             className="text-2xl font-medium tracking-tight text-shell-text md:text-3xl"
             data-home-greeting
@@ -45,7 +44,6 @@ export default async function HomePage() {
             displayName={shell.displayName}
             writtenQuestion={shell.homeWrittenQuestion}
           />
-          <p className="mt-4 text-[11px] text-shell-faint">not a live chat — pick a thread</p>
         </div>
       </section>
     </div>

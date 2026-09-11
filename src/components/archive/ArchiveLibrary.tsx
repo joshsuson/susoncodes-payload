@@ -37,8 +37,7 @@ export function ArchiveLibrary({ emptyLabel, items, title, type }: ArchiveLibrar
       data-content-library={type}
     >
       <header>
-        <p className="shell-label">secondary view</p>
-        <h1 className="mt-2 text-2xl font-medium tracking-tight text-shell-text md:text-3xl">
+        <h1 className="text-2xl font-medium tracking-tight text-shell-text md:text-3xl">
           {title.toLowerCase()}
         </h1>
       </header>
@@ -123,10 +122,6 @@ export function ArchiveLibrary({ emptyLabel, items, title, type }: ArchiveLibrar
           </div>
         )}
       </div>
-
-      <p className="mt-8 text-center text-[11px] text-shell-faint">
-        {items.length} {title.toLowerCase()} in this secondary view
-      </p>
     </div>
   )
 }

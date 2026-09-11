@@ -242,9 +242,6 @@ export function ChatShell({ children, shell }: ChatShellProps) {
             </div>
           </section>
         </nav>
-        <div className="mt-auto border-t border-shell-border px-3 py-3">
-          <Identity shell={shell} />
-        </div>
       </aside>
 
       <div className="relative flex min-h-0 min-w-0 flex-1 flex-col">

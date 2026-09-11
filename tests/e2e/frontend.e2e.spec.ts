@@ -16,7 +16,6 @@ test.describe('Chat Shell Home', () => {
     await expect(page.locator('[data-sidebar]')).toBeVisible()
     await expect(page.locator('[data-message-column]')).toBeVisible()
     await expect(page.getByRole('heading', { name: 'Where should we begin?' })).toBeVisible()
-    await expect(page.getByText('this is not a live chat', { exact: false })).toBeVisible()
     await expect(page.locator('[data-thread-footer-chips]')).toHaveCount(0)
 
     await page.getByRole('button', { name: 'Choose a question for Josh Bot' }).click()
