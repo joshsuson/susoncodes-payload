@@ -1,6 +1,23 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
+/* Touch devices fire :hover on tap; only paint hover when a fine pointer can leave. */
+@custom-variant hover {
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      @slot;
+    }
+  }
+}
+
+@custom-variant group-hover {
+  @media (hover: hover) and (pointer: fine) {
+    &:is(:where(.group):hover *) {
+      @slot;
+    }
+  }
+}
+
 @theme inline {
   --radius-sm: 0;
   --radius-md: 0;
@@ -43,6 +60,7 @@
 :root {
   color-scheme: dark;
   --radius: 0;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   --shell-canvas: #0d0f14;
   --shell-sidebar: #11131a;
   --shell-panel: #161a22;
@@ -92,11 +110,11 @@
 
 @layer components {
   .shell-sidebar-link {
-    @apply flex min-h-9 items-center gap-2 rounded-none border border-transparent px-2.5 text-[13px] text-shell-muted transition-colors hover:border-shell-border hover:bg-shell-elevated/80 hover:text-shell-text focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-shell-accent;
+    @apply flex min-h-9 items-center gap-2 rounded-none border border-transparent px-2.5 text-[13px] text-shell-muted focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-shell-accent;
   }
 
   .shell-mobile-link {
-    @apply flex min-h-9 items-center justify-center rounded-none border border-transparent px-2 text-center text-[11px] font-medium tracking-wide text-shell-muted uppercase transition-colors hover:border-shell-border hover:bg-shell-elevated/80 hover:text-shell-text focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-shell-accent;
+    @apply flex min-h-9 items-center justify-center rounded-none border border-transparent px-2 text-center text-[11px] font-medium tracking-wide text-shell-muted uppercase focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-shell-accent;
   }
 
   .shell-label {
@@ -109,6 +127,77 @@
 
   .shell-chip {
     @apply inline-flex items-center rounded-none border border-shell-border px-2 py-0.5 text-[10px] font-medium tracking-[0.12em] text-shell-faint uppercase;
+  }
+}
+
+/* Press-down scale for Chat Shell controls. Named properties only — never transition: all. */
+.shell-pressable {
+  transition:
+    border-color 150ms var(--ease-out),
+    background-color 150ms var(--ease-out),
+    color 150ms var(--ease-out),
+    opacity 150ms var(--ease-out),
+    transform 100ms var(--ease-out);
+}
+
+.shell-pressable:active {
+  transform: scale(0.97);
+}
+
+.shell-paint {
+  transition:
+    border-color 150ms var(--ease-out),
+    background-color 150ms var(--ease-out),
+    color 150ms var(--ease-out);
+}
+
+.shell-archive-title {
+  transition: color 150ms var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .shell-sidebar-link:hover {
+    border-color: var(--shell-border);
+    background-color: color-mix(in srgb, var(--shell-elevated) 80%, transparent);
+    color: var(--shell-text);
+  }
+
+  .shell-mobile-link:hover {
+    border-color: var(--shell-border);
+    background-color: color-mix(in srgb, var(--shell-elevated) 80%, transparent);
+    color: var(--shell-text);
+  }
+
+  .shell-faux-prompt:hover {
+    border-color: var(--shell-faint);
+    background-color: var(--shell-elevated);
+  }
+
+  .shell-prompt-suggestion:hover {
+    background-color: var(--shell-elevated);
+    color: var(--shell-text);
+  }
+
+  .shell-search-toggle:hover {
+    background-color: var(--shell-elevated);
+    color: var(--shell-text);
+  }
+
+  .shell-show-more:hover {
+    border-color: color-mix(in srgb, var(--shell-accent) 50%, transparent);
+    color: var(--shell-text);
+  }
+
+  .shell-visit-project:hover {
+    opacity: 0.85;
+  }
+
+  .shell-archive-row:hover {
+    background-color: color-mix(in srgb, var(--shell-elevated) 50%, transparent);
+  }
+
+  .shell-archive-row:hover .shell-archive-title {
+    color: var(--shell-accent);
   }
 }
 
@@ -132,5 +221,17 @@
 @media (prefers-reduced-motion: reduce) {
   [data-message-column] > * {
     animation: none;
+  }
+
+  .shell-pressable {
+    transition:
+      border-color 150ms var(--ease-out),
+      background-color 150ms var(--ease-out),
+      color 150ms var(--ease-out),
+      opacity 150ms var(--ease-out);
+  }
+
+  .shell-pressable:active {
+    transform: none;
   }
 }

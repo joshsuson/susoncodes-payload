@@ -9,7 +9,7 @@ type ThoughtCardProps = {
 export function ThoughtCard({ thought }: ThoughtCardProps) {
   return (
     <article
-      className="border border-shell-border bg-shell-canvas/40 p-3 transition hover:border-shell-accent/40 hover:bg-shell-elevated/40"
+      className="shell-paint border border-shell-border bg-shell-canvas/40 p-3 hover:border-shell-accent/40 hover:bg-shell-elevated/40"
       data-thought-card={thought.slug}
     >
       <div className="min-w-0 space-y-1">

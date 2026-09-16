@@ -107,7 +107,7 @@ export function ChatShell({ children, shell }: ChatShellProps) {
           <Link
             aria-current={current === 'home' ? 'page' : undefined}
             className={cn(
-              'shell-mobile-link bg-shell-sidebar',
+              'shell-pressable shell-mobile-link bg-shell-sidebar',
               current === 'home' && 'bg-shell-elevated text-shell-text',
             )}
             data-mobile-destination="home"
@@ -120,7 +120,7 @@ export function ChatShell({ children, shell }: ChatShellProps) {
             <Link
               aria-current={current === thread.name ? 'page' : undefined}
               className={cn(
-                'shell-mobile-link bg-shell-sidebar',
+                'shell-pressable shell-mobile-link bg-shell-sidebar',
                 current === thread.name && 'bg-shell-elevated text-shell-text',
               )}
               data-mobile-destination={thread.name}
@@ -148,7 +148,7 @@ export function ChatShell({ children, shell }: ChatShellProps) {
             aria-controls="sidebar-search-panel"
             aria-expanded={searchOpen}
             aria-label={searchOpen ? 'Close recent Thread search' : 'Search recent Threads'}
-            className="flex size-8 shrink-0 items-center justify-center text-shell-muted transition-colors hover:bg-shell-elevated hover:text-shell-text focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-shell-accent"
+            className="shell-pressable shell-search-toggle flex size-8 shrink-0 items-center justify-center text-shell-muted focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-shell-accent"
             data-sidebar-search-toggle
             onClick={() => {
               setSearchOpen((open) => {
@@ -194,7 +194,7 @@ export function ChatShell({ children, shell }: ChatShellProps) {
             <Link
               aria-current={current === 'home' ? 'page' : undefined}
               className={cn(
-                'shell-sidebar-link',
+                'shell-pressable shell-sidebar-link',
                 current === 'home' && 'border-shell-border bg-shell-elevated text-shell-text',
               )}
               data-nav="home"
@@ -221,7 +221,7 @@ export function ChatShell({ children, shell }: ChatShellProps) {
                   <Link
                     aria-current={isCurrent ? 'page' : undefined}
                     className={cn(
-                      'shell-sidebar-link',
+                      'shell-pressable shell-sidebar-link',
                       isCurrent && 'border-shell-border bg-shell-elevated text-shell-text',
                     )}
                     data-nav={thread.name}
