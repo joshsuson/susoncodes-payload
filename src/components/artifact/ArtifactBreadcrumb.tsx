@@ -17,7 +17,7 @@ export function ArtifactBreadcrumb({ archive, href, label, title }: ArtifactBrea
         data-artifact-breadcrumb={archive}
       >
         <Link
-          className="-ml-1 inline-flex items-center px-1 text-shell-muted transition-colors hover:text-shell-text focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-shell-accent"
+          className="shell-paint -ml-1 inline-flex items-center px-1 text-shell-muted hover:text-shell-text focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-shell-accent"
           href={href}
         >
           {label.toLowerCase()}

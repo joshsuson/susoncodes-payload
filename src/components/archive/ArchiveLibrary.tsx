@@ -58,12 +58,12 @@ export function ArchiveLibrary({ emptyLabel, items, title, type }: ArchiveLibrar
 
               return (
                 <article
-                  className="relative grid min-h-14 grid-cols-[minmax(0,1fr)_2rem] items-center gap-4 px-2 py-2 transition-colors hover:bg-shell-elevated/50 md:grid-cols-[minmax(0,1fr)_10rem_8rem_2rem] md:px-3"
+                  className="shell-pressable shell-archive-row relative grid min-h-14 grid-cols-[minmax(0,1fr)_2rem] items-center gap-4 px-2 py-2 md:grid-cols-[minmax(0,1fr)_10rem_8rem_2rem] md:px-3"
                   data-archive-row={item.slug}
                   key={item.slug}
                 >
                   <Link
-                    className="group flex min-w-0 items-center gap-3 after:absolute after:inset-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-shell-accent"
+                    className="flex min-w-0 items-center gap-3 after:absolute after:inset-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-shell-accent"
                     href={item.href}
                   >
                     <span
@@ -85,7 +85,7 @@ export function ArchiveLibrary({ emptyLabel, items, title, type }: ArchiveLibrar
                       )}
                     </span>
                     <div className="min-w-0">
-                      <h2 className="truncate text-[13px] font-medium text-shell-text transition-colors group-hover:text-shell-accent">
+                      <h2 className="shell-archive-title truncate text-[13px] font-medium text-shell-text">
                         {item.title}
                       </h2>
                       <p className="mt-0.5 truncate text-[11px] text-shell-faint md:hidden">

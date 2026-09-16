@@ -9,7 +9,7 @@ type ProjectCardProps = {
 export function ProjectCard({ project }: ProjectCardProps) {
   return (
     <article
-      className="border border-shell-border bg-shell-canvas/40 p-3 transition hover:border-shell-accent/40 hover:bg-shell-elevated/40"
+      className="shell-paint border border-shell-border bg-shell-canvas/40 p-3 hover:border-shell-accent/40 hover:bg-shell-elevated/40"
       data-project-card={project.slug}
     >
       <div className="flex items-start justify-between gap-3">
