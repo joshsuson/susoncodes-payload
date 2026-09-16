@@ -56,12 +56,7 @@ export default async function ThoughtArtifactPage({ params }: ThoughtArtifactPag
 
   return (
     <div className="min-h-full" data-thought-artifact data-thought-detail data-thought-slug={slug}>
-      <ArtifactBreadcrumb
-        archive="thoughts"
-        href="/thoughts"
-        label="Thoughts"
-        title={thought.title}
-      />
+      <ArtifactBreadcrumb href="/written" label="written" title={thought.title} />
 
       <article className="mx-auto w-full max-w-3xl px-4 py-10 md:px-8 md:py-16">
         <header>

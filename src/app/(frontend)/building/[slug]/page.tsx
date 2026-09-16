@@ -71,12 +71,7 @@ export default async function ProjectArtifactPage({ params }: ProjectArtifactPag
 
   return (
     <div className="min-h-full" data-project-artifact data-project-detail data-project-slug={slug}>
-      <ArtifactBreadcrumb
-        archive="projects"
-        href="/projects"
-        label="Projects"
-        title={project.title}
-      />
+      <ArtifactBreadcrumb href="/building" label="building" title={project.title} />
 
       <article className="mx-auto w-full max-w-5xl px-4 py-10 md:px-8 md:py-16">
         <header className="mx-auto max-w-3xl">

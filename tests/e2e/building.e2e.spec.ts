@@ -29,6 +29,8 @@ test.describe('Building Thread', () => {
     const firstCard = page.locator('[data-project-card]').first()
     await expect(firstCard.locator('[data-build-status]')).toBeVisible()
     await expect(firstCard.getByRole('link').first()).toHaveAttribute('href', /\/building\//)
+    await expect(page.locator('[data-browse-all="projects"]')).toHaveAttribute('href', '/projects')
+    await expect(page.locator('[data-sidebar] [data-nav="projects"]')).toHaveCount(0)
   })
 
   test('Show More appends an assistant-only Project bundle', async ({ page }) => {
