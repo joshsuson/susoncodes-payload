@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { useState } from 'react'
 
 import { AssistantBubble } from '@/components/chat/AssistantBubble'
@@ -150,6 +151,16 @@ export function WrittenThread({
           </button>
         </div>
       ) : null}
+
+      <p className="text-xs text-shell-faint">
+        <Link
+          className="transition-colors hover:text-shell-muted focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-shell-accent"
+          data-browse-all="thoughts"
+          href="/thoughts"
+        >
+          browse all
+        </Link>
+      </p>
     </div>
   )
 }

@@ -26,6 +26,8 @@ test.describe('Written Thread', () => {
 
     const firstCard = page.locator('[data-thought-card]').first()
     await expect(firstCard.getByRole('link').first()).toHaveAttribute('href', /\/written\//)
+    await expect(page.locator('[data-browse-all="thoughts"]')).toHaveAttribute('href', '/thoughts')
+    await expect(page.locator('[data-sidebar] [data-nav="thoughts"]')).toHaveCount(0)
   })
 
   test('Show More appends an assistant-only Thought bundle', async ({ page }) => {

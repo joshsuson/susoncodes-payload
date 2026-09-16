@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test'
 
 test.describe('Archives and Artifact breadcrumbs', () => {
-  test('projects archive lists published Projects and breadcrumb returns from Artifact', async ({
+  test('projects archive lists published Projects and breadcrumb returns to Building', async ({
     page,
   }) => {
     const response = await page.goto('/projects')
@@ -27,19 +27,20 @@ test.describe('Archives and Artifact breadcrumbs', () => {
     await expect(page.locator('[data-chat-shell]')).toBeVisible()
     await expect(page.locator('[data-project-artifact]')).toBeVisible()
 
-    const breadcrumb = page.locator('[data-artifact-breadcrumb="projects"]')
+    const breadcrumb = page.locator('[data-artifact-breadcrumb="building"]')
     await expect(breadcrumb).toBeVisible()
-    await expect(breadcrumb.getByRole('link', { name: 'Projects' })).toHaveAttribute(
+    await expect(breadcrumb.getByRole('link', { name: 'building', exact: true })).toHaveAttribute(
       'href',
-      '/projects',
+      '/building',
     )
 
-    await breadcrumb.getByRole('link', { name: 'Projects' }).click()
-    await page.waitForURL('**/projects')
-    await expect(page.locator('[data-content-library="projects"]')).toBeVisible()
+    await breadcrumb.getByRole('link', { name: 'building', exact: true }).click()
+    await page.waitForURL('**/building')
+    await expect(page.locator('[data-building-list]')).toBeVisible()
+    await expect(page.locator('[data-browse-all="projects"]')).toHaveAttribute('href', '/projects')
   })
 
-  test('thoughts archive lists published Thoughts and breadcrumb returns from Artifact', async ({
+  test('thoughts archive lists published Thoughts and breadcrumb returns to Written', async ({
     page,
   }) => {
     const response = await page.goto('/thoughts')
@@ -65,15 +66,16 @@ test.describe('Archives and Artifact breadcrumbs', () => {
     await expect(page.locator('[data-chat-shell]')).toBeVisible()
     await expect(page.locator('[data-thought-artifact]')).toBeVisible()
 
-    const breadcrumb = page.locator('[data-artifact-breadcrumb="thoughts"]')
+    const breadcrumb = page.locator('[data-artifact-breadcrumb="written"]')
     await expect(breadcrumb).toBeVisible()
-    await expect(breadcrumb.getByRole('link', { name: 'Thoughts' })).toHaveAttribute(
+    await expect(breadcrumb.getByRole('link', { name: 'written', exact: true })).toHaveAttribute(
       'href',
-      '/thoughts',
+      '/written',
     )
 
-    await breadcrumb.getByRole('link', { name: 'Thoughts' }).click()
-    await page.waitForURL('**/thoughts')
-    await expect(page.locator('[data-content-library="thoughts"]')).toBeVisible()
+    await breadcrumb.getByRole('link', { name: 'written', exact: true }).click()
+    await page.waitForURL('**/written')
+    await expect(page.locator('[data-written-list]')).toBeVisible()
+    await expect(page.locator('[data-browse-all="thoughts"]')).toHaveAttribute('href', '/thoughts')
   })
 })

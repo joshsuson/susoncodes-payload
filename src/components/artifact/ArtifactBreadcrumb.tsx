@@ -1,26 +1,26 @@
 import Link from 'next/link'
 
+import './ArtifactBreadcrumb.css'
+
 type ArtifactBreadcrumbProps = {
-  archive: 'projects' | 'thoughts'
-  href: '/projects' | '/thoughts'
-  label: 'Projects' | 'Thoughts'
+  href: '/building' | '/written'
+  label: 'building' | 'written'
   title: string
 }
 
-export function ArtifactBreadcrumb({ archive, href, label, title }: ArtifactBreadcrumbProps) {
+export function ArtifactBreadcrumb({ href, label, title }: ArtifactBreadcrumbProps) {
   return (
-    // h-12 matches ChatShell sidebar topbar so the shared border line meets cleanly.
-    <div className="sticky top-0 z-10 h-12 border-b border-shell-border bg-shell-canvas/95 backdrop-blur-sm">
+    <div className="artifact-breadcrumb relative">
       <nav
         aria-label="Breadcrumb"
         className="mx-auto flex h-full w-full max-w-5xl items-center gap-2 px-4 text-[13px] md:px-8"
-        data-artifact-breadcrumb={archive}
+        data-artifact-breadcrumb={label}
       >
         <Link
           className="shell-paint -ml-1 inline-flex items-center px-1 text-shell-muted hover:text-shell-text focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-shell-accent"
           href={href}
         >
-          {label.toLowerCase()}
+          {label}
         </Link>
         <span aria-hidden="true" className="text-shell-faint">
           /

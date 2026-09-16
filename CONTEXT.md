@@ -53,7 +53,7 @@ A Project or Thought shown as its own article surface inside the Chat Shell (sti
 _Avoid_: post, detail page, entry (too generic)
 
 **Archive**:
-A secondary library list of all Projects (`/projects`) or Thoughts (`/thoughts`). Breadcrumb parent for Artifacts. Not a Thread.
+A secondary library list of all Projects (`/projects`) or Thoughts (`/thoughts`). Reachable from Building/Written via a quiet “browse all” link. Not a Thread, and not a breadcrumb parent.
 _Avoid_: index, blog listing
 
 ### Publishing
@@ -68,7 +68,7 @@ Where a Project actually is in life: `active`, `shipped`, or `parked`.
 - **Content types**: Projects + Thoughts, plus globals for shell and site extras. No Blog collection. No hierarchical Pages tree. No `/blog` redirects.
 - **Public vocabulary & URLs**: Keep Building/Written/About Threads; Project/Thought Artifacts; Project/Thought Archives; Josh Bot persona.
 - **About**: Chat Thread only — bot reply copy in shell global. Classic bio, Rules For Building, and related dead templates are not ported.
-- **Surfaces**: Threads = chat theater; Artifacts = standalone articles in the shell; Archives = library lists and breadcrumb parents (`Projects / {title}`, `Thoughts / {title}`).
+- **Surfaces**: Threads = chat theater; Artifacts = standalone articles in the shell; Archives = secondary library lists. Artifact crumbs return to Building/Written Threads (`building / {title}`, `written / {title}`).
 - **Project fields**: Full mysite shape — title, pitch, build status, external URL, image, what it is, thought process, learnings, slug, date, SEO trio.
 - **Thought fields**: title, optional summary, body, slug, date, SEO trio. No tags/series.
 - **Globals**: Two globals — `shell` (persona, profile photo, Home Faux Prompt copy, per-Thread labels/messages) and `site` (social links). Not four Statamic mirrors, not one mega-global.
@@ -82,7 +82,7 @@ Where a Project actually is in life: `active`, `shipped`, or `parked`.
 - **Payload stubs**: Remove `Posts` and `homePage`; replace with the real model.
 - **Seed data**: Dummy Projects and Thoughts only (deletable fixtures). Do not import “Why I Choose To Write” or other retired Statamic writing. Do seed shell/site globals copy from mysite so the shell has real voice.
 - **Thread footer chips**: Scrapped — no “Back to Home” / cross-thread chip rows under message columns. Sidebar (and mobile nav) are the wayfinding.
-- **Archives**: Plain secondary library lists (not chat theater), real enough to be breadcrumb landings.
+- **Archives**: Plain secondary library lists (not chat theater), reachable from Building/Written via a quiet “browse all” link — not crumb parents and not in shell nav.
 - **Seed volume**: ~8 dummy Projects (mixed build statuses) + ~8 dummy Thoughts; obvious fake delete-fodder. Shell/site globals seeded from live mysite copy.
 - **Admin**: Solo admin user; public read-only; no multi-author RBAC.
 - **In scope**: shell chrome, Home Faux Prompt, Building + Written Threads (list, Show More, Artifact detail), About Thread, Archives + breadcrumbs, SEO, admin usable without Statamic, dark shell visual match. Not in scope: footer chips, Blog, Tinkering With, classic bio/Rules For Building, `/blog` redirects.
