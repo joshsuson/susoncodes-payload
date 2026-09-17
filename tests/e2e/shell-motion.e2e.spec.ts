@@ -284,15 +284,18 @@ async function auditPromptMenu(page: import('@playwright/test').Page): Promise<P
             if (cssText.includes('scale(0)') && !cssText.includes('scale(0.97)')) {
               usesScaleZero = true
             }
-            if (selectorText.includes('[hidden]')) {
-              closedScale = style.transform
-              exitMs = durationMs(style.transitionDuration || cssText)
-            } else if (!selectorText.includes('[hidden]')) {
-              enterMs = durationMs(style.transitionDuration || cssText)
+            if (selectorText === '[data-prompt-menu][hidden]') {
+              closedScale = style.transform || closedScale
+              const parsed = durationMs(style.transitionDuration || cssText)
+              if (parsed) exitMs = parsed
+            } else if (selectorText === '[data-prompt-menu]') {
+              const parsed = durationMs(style.transitionDuration || cssText)
+              if (parsed) enterMs = parsed
             }
           }
           if (selectorText.includes('[data-prompt-chevron]')) {
-            chevronMs = durationMs(style.transitionDuration || cssText)
+            const parsed = durationMs(style.transitionDuration || cssText)
+            if (parsed) chevronMs = parsed
           }
         }
 
