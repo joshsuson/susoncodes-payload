@@ -9,6 +9,22 @@ async function expectMinHitArea(locator: Locator) {
   expect(box!.height).toBeGreaterThanOrEqual(MIN_HIT)
 }
 
+async function hitHrefAt(card: Locator, sampleSelector: string) {
+  return card.evaluate((el, selector) => {
+    const sample = el.querySelector(selector)
+    if (!sample) return null
+    const rect = sample.getBoundingClientRect()
+    const node = document.elementFromPoint(rect.left + 12, rect.top + 8)
+    return node?.closest('a')?.getAttribute('href') ?? null
+  }, sampleSelector)
+}
+
+async function clickAtSample(card: Locator, sampleSelector: string) {
+  const box = await card.locator(sampleSelector).first().boundingBox()
+  expect(box, 'expected a visible sample point').toBeTruthy()
+  await card.page().mouse.click(box!.x + 12, box!.y + Math.min(8, box!.height / 2))
+}
+
 test.describe('Hit targets and stretch-link cards', () => {
   test('search, Show More, and Visit Project meet the 44px floor', async ({ page }) => {
     await page.goto('/')
@@ -28,8 +44,10 @@ test.describe('Hit targets and stretch-link cards', () => {
     const projectSlug = await projectCard.getAttribute('data-project-card')
     expect(projectSlug).toBeTruthy()
 
-    await projectCard.locator('p').first().click()
-    await page.waitForURL(`**/building/${projectSlug}`)
+    const projectHref = `/building/${projectSlug}`
+    expect(await hitHrefAt(projectCard, 'p')).toBe(projectHref)
+    await clickAtSample(projectCard, 'p')
+    await page.waitForURL(`**${projectHref}`)
     await expect(page.locator('[data-project-artifact]')).toBeVisible()
 
     await page.goto('/written')
@@ -38,8 +56,10 @@ test.describe('Hit targets and stretch-link cards', () => {
     const thoughtSlug = await thoughtCard.getAttribute('data-thought-card')
     expect(thoughtSlug).toBeTruthy()
 
-    await thoughtCard.locator('p').first().click()
-    await page.waitForURL(`**/written/${thoughtSlug}`)
+    const thoughtHref = `/written/${thoughtSlug}`
+    expect(await hitHrefAt(thoughtCard, 'p')).toBe(thoughtHref)
+    await clickAtSample(thoughtCard, 'p')
+    await page.waitForURL(`**${thoughtHref}`)
     await expect(page.locator('[data-thought-artifact]')).toBeVisible()
   })
 
