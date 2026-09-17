@@ -70,19 +70,19 @@ export function ChatShell({ children, shell }: ChatShellProps) {
       {
         href: '/building',
         label: shell.buildingUserMessage,
-        mobileLabel: 'Building',
+        mobileLabel: 'building',
         name: 'building' as const,
       },
       {
         href: '/written',
         label: shell.writtenUserMessage,
-        mobileLabel: 'Written',
+        mobileLabel: 'written',
         name: 'written' as const,
       },
       {
         href: '/about',
         label: shell.aboutUserMessage,
-        mobileLabel: 'About',
+        mobileLabel: 'about',
         name: 'about' as const,
       },
     ],
@@ -114,7 +114,7 @@ export function ChatShell({ children, shell }: ChatShellProps) {
             data-nav="home"
             href="/"
           >
-            Home
+            home
           </Link>
           {threads.map((thread) => (
             <Link
@@ -148,7 +148,7 @@ export function ChatShell({ children, shell }: ChatShellProps) {
             aria-controls="sidebar-search-panel"
             aria-expanded={searchOpen}
             aria-label={searchOpen ? 'Close recent Thread search' : 'Search recent Threads'}
-            className="shell-pressable shell-search-toggle flex size-8 shrink-0 items-center justify-center text-shell-muted focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-shell-accent"
+            className="shell-pressable shell-search-toggle flex size-11 shrink-0 items-center justify-center text-shell-muted focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-shell-accent"
             data-sidebar-search-toggle
             onClick={() => {
               setSearchOpen((open) => {

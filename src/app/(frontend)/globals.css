@@ -114,7 +114,7 @@
   }
 
   .shell-mobile-link {
-    @apply flex min-h-9 items-center justify-center rounded-none border border-transparent px-2 text-center text-[11px] font-medium tracking-wide text-shell-muted uppercase focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-shell-accent;
+    @apply flex min-h-9 items-center justify-center rounded-none border border-transparent px-2 text-center text-[11px] font-medium tracking-wide text-shell-muted focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-shell-accent;
   }
 
   .shell-label {
@@ -140,7 +140,7 @@
     transform 100ms var(--ease-out);
 }
 
-.shell-pressable:active {
+.shell-pressable:active:not(:disabled):not([aria-disabled='true']) {
   transform: scale(0.97);
 }
 
