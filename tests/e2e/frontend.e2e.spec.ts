@@ -43,7 +43,7 @@ test.describe('Chat Shell Home', () => {
     await page.goto('/')
 
     await expect(page.locator('[data-mobile-nav]')).toBeVisible()
-    for (const destination of ['Home', 'Building', 'Written', 'About']) {
+    for (const destination of ['home', 'building', 'written', 'about']) {
       await expect(
         page.locator('[data-mobile-nav]').getByRole('link', { name: destination }),
       ).toBeVisible()
