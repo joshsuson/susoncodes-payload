@@ -92,7 +92,8 @@
       'calt' on;
     font-size: 14px;
     line-height: 1.55;
-    letter-spacing: -0.01em;
+    /* Small UI type wants 0 or slight positive tracking; display titles tighten separately. */
+    letter-spacing: 0.01em;
   }
 
   ::selection {
