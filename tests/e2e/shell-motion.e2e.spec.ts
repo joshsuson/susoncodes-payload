@@ -108,7 +108,14 @@ test.describe('Chat Shell motion tokens', () => {
     await expect(page.locator('[data-external-link]')).toHaveClass(/shell-pressable/)
 
     await page.goto('/projects')
-    await expect(page.locator('[data-archive-row]').first()).toHaveClass(/shell-pressable/)
+    const projectsRow = page.locator('[data-archive-row]').first()
+    await expect(projectsRow).toHaveRole('link')
+    await expect(projectsRow).toHaveClass(/shell-pressable/)
+
+    await page.goto('/thoughts')
+    const thoughtsRow = page.locator('[data-archive-row]').first()
+    await expect(thoughtsRow).toHaveRole('link')
+    await expect(thoughtsRow).toHaveClass(/shell-pressable/)
   })
 
   test('keeps the Faux Prompt menu mounted and origin-aware', async ({ page }) => {
