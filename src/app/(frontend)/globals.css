@@ -92,7 +92,8 @@
       'calt' on;
     font-size: 14px;
     line-height: 1.55;
-    letter-spacing: -0.01em;
+    /* Small UI type wants 0 or slight positive tracking; display titles tighten separately. */
+    letter-spacing: 0.01em;
   }
 
   ::selection {
@@ -127,6 +128,16 @@
 
   .shell-chip {
     @apply inline-flex items-center rounded-none border border-shell-border px-2 py-0.5 text-[10px] font-medium tracking-[0.12em] text-shell-faint uppercase;
+  }
+
+  .shell-artifact-title {
+    letter-spacing: -0.025em;
+    line-height: 1.15;
+
+    @variant md {
+      letter-spacing: -0.03em;
+      line-height: 1.08;
+    }
   }
 }
 

@@ -86,7 +86,7 @@ export default async function ProjectArtifactPage({ params }: ProjectArtifactPag
             </span>
           </div>
 
-          <h1 className="mt-4 text-3xl font-medium tracking-tight text-shell-text md:text-5xl">
+          <h1 className="shell-artifact-title mt-4 text-3xl font-medium text-shell-text md:text-5xl">
             {project.title}
           </h1>
 
