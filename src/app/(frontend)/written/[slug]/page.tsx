@@ -68,7 +68,7 @@ export default async function ThoughtArtifactPage({ params }: ThoughtArtifactPag
             </time>
           </div>
 
-          <h1 className="shell-artifact-title mt-4 text-3xl font-medium text-shell-text md:text-5xl">
+          <h1 className="mt-4 text-3xl font-medium tracking-tight text-shell-text md:text-5xl md:tracking-[-0.03em] md:leading-[1.08]">
             {thought.title}
           </h1>
 

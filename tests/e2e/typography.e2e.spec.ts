@@ -58,8 +58,9 @@ test.describe('Size-specific tracking and display leading', () => {
     await page.goto('/building/definitely-fake-seed-project-1')
 
     const projectTitle = page.locator('[data-project-artifact] h1')
-    await expect(projectTitle).toHaveClass(/shell-artifact-title/)
     await expect(projectTitle).toHaveClass(/md:text-5xl/)
+    await expect(projectTitle).toHaveClass(/md:tracking-\[-0\.03em\]/)
+    await expect(projectTitle).toHaveClass(/md:leading-\[1\.08\]/)
 
     const project = await typeMetrics(page, '[data-project-artifact] h1')
     expect(project.letterSpacingEm).toBeCloseTo(-0.03, 3)
@@ -68,7 +69,8 @@ test.describe('Size-specific tracking and display leading', () => {
 
     await page.goto('/written/definitely-fake-seed-thought-1')
     const thoughtTitle = page.locator('[data-thought-artifact] h1')
-    await expect(thoughtTitle).toHaveClass(/shell-artifact-title/)
+    await expect(thoughtTitle).toHaveClass(/md:tracking-\[-0\.03em\]/)
+    await expect(thoughtTitle).toHaveClass(/md:leading-\[1\.08\]/)
 
     const thought = await typeMetrics(page, '[data-thought-artifact] h1')
     expect(thought.letterSpacingEm).toBeCloseTo(-0.03, 3)

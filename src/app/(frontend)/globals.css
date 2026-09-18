@@ -129,16 +129,6 @@
   .shell-chip {
     @apply inline-flex items-center rounded-none border border-shell-border px-2 py-0.5 text-[10px] font-medium tracking-[0.12em] text-shell-faint uppercase;
   }
-
-  .shell-artifact-title {
-    letter-spacing: -0.025em;
-    line-height: 1.15;
-
-    @variant md {
-      letter-spacing: -0.03em;
-      line-height: 1.08;
-    }
-  }
 }
 
 /* Press-down scale for Chat Shell controls. Named properties only — never transition: all. */
