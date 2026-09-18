@@ -57,58 +57,57 @@ export function ArchiveLibrary({ emptyLabel, items, title, type }: ArchiveLibrar
               const statusLabel = titleCase(item.status)
 
               return (
-                <article
-                  className="shell-pressable shell-archive-row relative grid min-h-14 grid-cols-[minmax(0,1fr)_2rem] items-center gap-4 px-2 py-2 md:grid-cols-[minmax(0,1fr)_10rem_8rem_2rem] md:px-3"
-                  data-archive-row={item.slug}
-                  key={item.slug}
-                >
+                <article key={item.slug}>
                   <Link
-                    className="flex min-w-0 items-center gap-3 after:absolute after:inset-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-shell-accent"
+                    className="shell-pressable shell-archive-row grid min-h-14 grid-cols-[minmax(0,1fr)_2rem] items-center gap-4 px-2 py-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-shell-accent md:grid-cols-[minmax(0,1fr)_10rem_8rem_2rem] md:px-3"
+                    data-archive-row={item.slug}
                     href={item.href}
                   >
+                    <div className="flex min-w-0 items-center gap-3">
+                      <span
+                        aria-hidden="true"
+                        className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden border border-shell-border bg-shell-elevated text-[11px] font-medium text-shell-accent"
+                      >
+                        {item.imageUrl ? (
+                          <Image
+                            alt={item.imageAlt || ''}
+                            className="h-full w-full object-cover"
+                            height={36}
+                            src={item.imageUrl}
+                            width={36}
+                          />
+                        ) : type === 'projects' ? (
+                          'P'
+                        ) : (
+                          'T'
+                        )}
+                      </span>
+                      <div className="min-w-0">
+                        <h2 className="shell-archive-title truncate text-[13px] font-medium text-shell-text">
+                          {item.title}
+                        </h2>
+                        <p className="mt-0.5 truncate text-[11px] text-shell-faint md:hidden">
+                          {formattedDate} · {statusLabel}
+                        </p>
+                      </div>
+                    </div>
+
+                    <time
+                      className="hidden text-[12px] text-shell-muted md:block"
+                      dateTime={item.date.slice(0, 10)}
+                    >
+                      {formattedDate}
+                    </time>
+                    <span className="hidden text-[12px] text-shell-muted md:block">
+                      {statusLabel}
+                    </span>
                     <span
                       aria-hidden="true"
-                      className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden border border-shell-border bg-shell-elevated text-[11px] font-medium text-shell-accent"
+                      className="flex h-8 w-8 items-center justify-center text-shell-faint"
                     >
-                      {item.imageUrl ? (
-                        <Image
-                          alt={item.imageAlt || ''}
-                          className="h-full w-full object-cover"
-                          height={36}
-                          src={item.imageUrl}
-                          width={36}
-                        />
-                      ) : type === 'projects' ? (
-                        'P'
-                      ) : (
-                        'T'
-                      )}
+                      →
                     </span>
-                    <div className="min-w-0">
-                      <h2 className="shell-archive-title truncate text-[13px] font-medium text-shell-text">
-                        {item.title}
-                      </h2>
-                      <p className="mt-0.5 truncate text-[11px] text-shell-faint md:hidden">
-                        {formattedDate} · {statusLabel}
-                      </p>
-                    </div>
                   </Link>
-
-                  <time
-                    className="hidden text-[12px] text-shell-muted md:block"
-                    dateTime={item.date.slice(0, 10)}
-                  >
-                    {formattedDate}
-                  </time>
-                  <span className="hidden text-[12px] text-shell-muted md:block">
-                    {statusLabel}
-                  </span>
-                  <span
-                    aria-hidden="true"
-                    className="flex h-8 w-8 items-center justify-center text-shell-faint"
-                  >
-                    →
-                  </span>
                 </article>
               )
             })}

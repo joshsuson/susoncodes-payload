@@ -17,12 +17,12 @@ test.describe('Archives and Artifact breadcrumbs', () => {
 
     const firstRow = page.locator('[data-archive-row]').first()
     await expect(firstRow).toBeVisible()
+    await expect(firstRow).toHaveRole('link')
 
-    const artifactLink = firstRow.locator('a').first()
-    const href = await artifactLink.getAttribute('href')
+    const href = await firstRow.getAttribute('href')
     expect(href).toMatch(/^\/building\//)
 
-    await artifactLink.click()
+    await firstRow.click()
     await page.waitForURL('**/building/**')
     await expect(page.locator('[data-chat-shell]')).toBeVisible()
     await expect(page.locator('[data-project-artifact]')).toBeVisible()
@@ -56,12 +56,12 @@ test.describe('Archives and Artifact breadcrumbs', () => {
 
     const firstRow = page.locator('[data-archive-row]').first()
     await expect(firstRow).toBeVisible()
+    await expect(firstRow).toHaveRole('link')
 
-    const artifactLink = firstRow.locator('a').first()
-    const href = await artifactLink.getAttribute('href')
+    const href = await firstRow.getAttribute('href')
     expect(href).toMatch(/^\/written\//)
 
-    await artifactLink.click()
+    await firstRow.click()
     await page.waitForURL('**/written/**')
     await expect(page.locator('[data-chat-shell]')).toBeVisible()
     await expect(page.locator('[data-thought-artifact]')).toBeVisible()
