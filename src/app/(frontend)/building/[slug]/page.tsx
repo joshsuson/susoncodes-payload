@@ -97,7 +97,7 @@ export default async function ProjectArtifactPage({ params }: ProjectArtifactPag
           {project.externalUrl ? (
             <p className="mt-7">
               <Link
-                className="shell-pressable shell-visit-project inline-flex items-center gap-2 border border-shell-text bg-shell-text px-3 py-1.5 text-[12px] font-medium tracking-wide text-shell-canvas uppercase focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-shell-accent"
+                className="shell-pressable shell-visit-project inline-flex min-h-11 items-center gap-2 border border-shell-text bg-shell-text px-3 py-1.5 text-[12px] font-medium tracking-wide text-shell-canvas uppercase focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-shell-accent"
                 data-external-link
                 href={project.externalUrl}
                 rel="noopener noreferrer"

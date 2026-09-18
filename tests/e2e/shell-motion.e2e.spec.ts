@@ -59,7 +59,9 @@ async function auditMotion(page: import('@playwright/test').Page): Promise<Motio
       for (const rule of rules) {
         if (!(rule instanceof CSSStyleRule)) continue
         if (rule.selectorText.includes('.shell-pressable:active')) {
-          pressableActiveScale = rule.style.transform.includes('scale(0.97)')
+          pressableActiveScale =
+            rule.style.transform.includes('scale(0.97)') &&
+            rule.selectorText.includes(':disabled')
         }
       }
     }
