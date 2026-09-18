@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test'
+import { expect, test, type Page } from '@playwright/test'
 
 test.describe('Archives and Artifact breadcrumbs', () => {
   test('projects archive lists published Projects and breadcrumb returns to Building', async ({
@@ -78,4 +78,93 @@ test.describe('Archives and Artifact breadcrumbs', () => {
     await expect(page.locator('[data-written-list]')).toBeVisible()
     await expect(page.locator('[data-browse-all="thoughts"]')).toHaveAttribute('href', '/thoughts')
   })
+
+  for (const artifact of [
+    {
+      crumb: 'building' as const,
+      href: '/building',
+      path: '/building/definitely-fake-seed-project-1',
+      root: '[data-project-artifact]',
+    },
+    {
+      crumb: 'written' as const,
+      href: '/written',
+      path: '/written/definitely-fake-seed-thought-1',
+      root: '[data-thought-artifact]',
+    },
+  ]) {
+    test(`pins the ${artifact.crumb} Artifact breadcrumb while the message column scrolls`, async ({
+      page,
+    }) => {
+      await page.goto(artifact.path)
+      await expect(page.locator('[data-chat-shell]')).toBeVisible()
+      await expect(page.locator(artifact.root)).toBeVisible()
+
+      const crumbNav = page.locator(`[data-artifact-breadcrumb="${artifact.crumb}"]`)
+      const breadcrumb = page.locator('.artifact-breadcrumb')
+      const column = page.locator('[data-message-column]')
+
+      await expect(crumbNav.getByRole('link', { name: artifact.crumb, exact: true })).toHaveAttribute(
+        'href',
+        artifact.href,
+      )
+
+      const material = await breadcrumb.evaluate((element) => {
+        const styles = getComputedStyle(element)
+        return {
+          backdropFilter: styles.backdropFilter,
+          height: styles.height,
+          position: styles.position,
+          top: styles.top,
+        }
+      })
+
+      expect(material.position).toBe('sticky')
+      expect(material.top).toBe('0px')
+      expect(material.height).toBe('48px')
+      expect(material.backdropFilter).toContain('blur(16px)')
+
+      await page.evaluate((rootSelector) => {
+        const messageColumn = document.querySelector('[data-message-column]')
+        const root = document.querySelector(rootSelector)
+        if (!(messageColumn instanceof HTMLElement) || !(root instanceof HTMLElement)) return
+        if (messageColumn.scrollHeight > messageColumn.clientHeight) return
+
+        const spacer = document.createElement('div')
+        spacer.dataset.stickyScrollSpacer = ''
+        spacer.style.height = `${messageColumn.clientHeight + 240}px`
+        root.append(spacer)
+      }, artifact.root)
+
+      const before = await readStickyScroll(page)
+      expect(before.columnScroll).toBe(0)
+      expect(before.windowScroll).toBe(0)
+
+      await column.evaluate((element) => {
+        element.scrollTop = 240
+      })
+
+      const after = await readStickyScroll(page)
+      expect(after.columnScroll).toBeGreaterThanOrEqual(200)
+      expect(after.windowScroll).toBe(0)
+      expect(Math.abs(after.crumbTop - before.crumbTop)).toBeLessThan(1)
+      await expect(breadcrumb).toBeVisible()
+    })
+  }
 })
+
+async function readStickyScroll(page: Page) {
+  return page.evaluate(() => {
+    const crumb = document.querySelector('.artifact-breadcrumb')
+    const messageColumn = document.querySelector('[data-message-column]')
+    if (!(crumb instanceof HTMLElement) || !(messageColumn instanceof HTMLElement)) {
+      throw new Error('missing Artifact breadcrumb or message column')
+    }
+
+    return {
+      columnScroll: messageColumn.scrollTop,
+      crumbTop: crumb.getBoundingClientRect().top,
+      windowScroll: window.scrollY,
+    }
+  })
+}

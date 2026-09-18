@@ -93,7 +93,10 @@ export function ChatShell({ children, shell }: ChatShellProps) {
   const hasMatches = visibleThreads.length > 0
 
   return (
-    <div className="flex min-h-screen flex-col bg-shell-canvas md:flex-row" data-chat-shell>
+    <div
+      className="flex h-dvh min-h-0 flex-col overflow-hidden bg-shell-canvas md:flex-row"
+      data-chat-shell
+    >
       <header
         className="shrink-0 border-b border-shell-border bg-shell-sidebar px-3 pb-2 pt-3 md:hidden"
         data-mobile-nav
@@ -245,7 +248,11 @@ export function ChatShell({ children, shell }: ChatShellProps) {
       </aside>
 
       <div className="relative flex min-h-0 min-w-0 flex-1 flex-col">
-        <main className="flex-1 overflow-y-auto outline-none" data-message-column tabIndex={-1}>
+        <main
+          className="min-h-0 flex-1 overflow-y-auto outline-none"
+          data-message-column
+          tabIndex={-1}
+        >
           {children}
         </main>
       </div>

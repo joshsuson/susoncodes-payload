@@ -78,9 +78,11 @@
     @apply border-border outline-ring/50;
   }
 
+  /* Chat Shell owns the viewport so [data-message-column] is the only scrollport. */
   html,
   body {
-    min-height: 100%;
+    height: 100%;
+    overflow: hidden;
   }
 
   body {
