@@ -24,11 +24,20 @@ type WrittenThreadProps = {
   userMessage: string
 }
 
-function ThoughtCards({ thoughts }: { thoughts: ThoughtCardData[] }) {
+function ThoughtCards({
+  animateEnter = false,
+  thoughts,
+}: {
+  animateEnter?: boolean
+  thoughts: ThoughtCardData[]
+}) {
   if (thoughts.length === 0) return null
 
   return (
-    <div className="space-y-3" data-thought-cards>
+    <div
+      className={animateEnter ? 'shell-show-more-cards space-y-3' : 'space-y-3'}
+      data-thought-cards
+    >
       {thoughts.map((thought) => (
         <ThoughtCard key={thought.slug} thought={thought} />
       ))}
@@ -126,7 +135,7 @@ export function WrittenThread({
                   Fine. More from the archive — {bundle.rangeStart}–{bundle.rangeEnd} of{' '}
                   {bundle.total}.
                 </p>
-                <ThoughtCards thoughts={bundle.thoughts} />
+                <ThoughtCards animateEnter thoughts={bundle.thoughts} />
                 {!bundle.hasMore ? (
                   <p className="text-xs text-shell-faint" data-end-of-list>
                     That’s everything he’s bothered to publish. No secret draft pile for you.

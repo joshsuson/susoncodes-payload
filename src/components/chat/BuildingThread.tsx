@@ -24,11 +24,20 @@ type BuildingThreadProps = {
   userMessage: string
 }
 
-function ProjectCards({ projects }: { projects: ProjectCardData[] }) {
+function ProjectCards({
+  animateEnter = false,
+  projects,
+}: {
+  animateEnter?: boolean
+  projects: ProjectCardData[]
+}) {
   if (projects.length === 0) return null
 
   return (
-    <div className="space-y-3" data-project-cards>
+    <div
+      className={animateEnter ? 'shell-show-more-cards space-y-3' : 'space-y-3'}
+      data-project-cards
+    >
       {projects.map((project) => (
         <ProjectCard key={project.slug} project={project} />
       ))}
@@ -125,7 +134,7 @@ export function BuildingThread({
                 <p>
                   Fine. More of the pile — {bundle.rangeStart}–{bundle.rangeEnd} of {bundle.total}.
                 </p>
-                <ProjectCards projects={bundle.projects} />
+                <ProjectCards animateEnter projects={bundle.projects} />
                 {!bundle.hasMore ? (
                   <p className="text-xs text-shell-faint" data-end-of-list>
                     That’s everything on the shelf. No secret bonus track.

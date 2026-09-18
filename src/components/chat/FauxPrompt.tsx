@@ -29,6 +29,7 @@ export function FauxPrompt({
       <button
         aria-controls="home-prompt-suggestions"
         aria-expanded={suggestionsOpen}
+        aria-label="Choose a question for Josh Bot"
         className="shell-pressable shell-faux-prompt flex min-h-12 w-full items-center gap-3 border border-shell-border bg-shell-panel px-3 text-left text-shell-muted focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-shell-accent"
         data-faux-input
         onClick={() => setSuggestionsOpen((isOpen) => !isOpen)}
@@ -42,32 +43,33 @@ export function FauxPrompt({
         </span>
         <ChevronDown
           aria-hidden="true"
-          className={`size-4 shrink-0 transition-transform motion-reduce:transition-none ${suggestionsOpen ? 'rotate-180' : ''}`}
+          className={`size-4 shrink-0 ${suggestionsOpen ? 'rotate-180' : ''}`}
+          data-prompt-chevron
         />
       </button>
 
-      {suggestionsOpen ? (
-        <div
-          className="absolute z-10 mt-1 w-full border border-shell-border bg-shell-panel p-1"
-          data-prompt-menu
-          id="home-prompt-suggestions"
-        >
-          <p className="shell-label px-2.5 py-2">suggested</p>
-          {suggestions.map((suggestion) => (
-            <Link
-              className="shell-pressable shell-prompt-suggestion flex min-h-10 items-center gap-2 px-2.5 py-2 text-[13px] text-shell-muted focus-visible:bg-shell-elevated focus-visible:text-shell-text focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-shell-accent"
-              data-suggestion={suggestion.name}
-              href={suggestion.href}
-              key={suggestion.href}
-            >
-              <span className="text-shell-accent" aria-hidden="true">
-                ›
-              </span>
-              <span className="truncate">{suggestion.label}</span>
-            </Link>
-          ))}
-        </div>
-      ) : null}
+      <div
+        className="absolute z-10 mt-1 w-full border border-shell-border bg-shell-panel p-1"
+        data-prompt-menu
+        hidden={!suggestionsOpen}
+        id="home-prompt-suggestions"
+        inert={!suggestionsOpen ? true : undefined}
+      >
+        <p className="shell-label px-2.5 py-2">suggested</p>
+        {suggestions.map((suggestion) => (
+          <Link
+            className="shell-pressable shell-prompt-suggestion flex min-h-10 items-center gap-2 px-2.5 py-2 text-[13px] text-shell-muted focus-visible:bg-shell-elevated focus-visible:text-shell-text focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-shell-accent"
+            data-suggestion={suggestion.name}
+            href={suggestion.href}
+            key={suggestion.href}
+          >
+            <span className="text-shell-accent" aria-hidden="true">
+              ›
+            </span>
+            <span className="truncate">{suggestion.label}</span>
+          </Link>
+        ))}
+      </div>
     </div>
   )
 }
