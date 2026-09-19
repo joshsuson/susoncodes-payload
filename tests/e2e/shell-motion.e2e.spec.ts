@@ -302,15 +302,30 @@ async function readPressableMotion(
     }
   })
 
-  const box = await pressable.boundingBox()
-  if (!box) throw new Error('Faux Prompt has no bounding box')
+  const session = await page.context().newCDPSession(page)
+  await session.send('DOM.enable')
+  await session.send('CSS.enable')
+  const { root } = await session.send('DOM.getDocument', { depth: 0 })
+  const { nodeId } = await session.send('DOM.querySelector', {
+    nodeId: root.nodeId,
+    selector: '[data-faux-input]',
+  })
+  if (!nodeId) throw new Error('Could not resolve Faux Prompt node')
+  await session.send('CSS.forcePseudoState', {
+    nodeId,
+    forcedPseudoClasses: ['active'],
+  })
 
-  await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2)
-  await page.mouse.down()
+  if (reducedMotion === 'no-preference') {
+    await page.waitForFunction(() => {
+      const el = document.querySelector('[data-faux-input]')
+      return Boolean(el && /0\.97/.test(getComputedStyle(el).transform))
+    })
+  }
+
   const active = await pressable.evaluate((el) => ({
     transform: getComputedStyle(el).transform,
   }))
-  await page.mouse.up()
 
   return { active, idle }
 }
