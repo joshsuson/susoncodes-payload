@@ -291,7 +291,7 @@
       opacity 150ms var(--ease-out);
   }
 
-  .shell-pressable:active {
+  .shell-pressable:active:not(:disabled):not([aria-disabled='true']) {
     transform: none;
   }
 }

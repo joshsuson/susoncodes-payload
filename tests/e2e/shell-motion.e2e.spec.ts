@@ -42,10 +42,17 @@ async function auditMotion(page: import('@playwright/test').Page): Promise<Motio
             if (!(inner instanceof CSSStyleRule)) continue
             if (!inner.selectorText.includes('.shell-pressable')) continue
             const text = inner.cssText
-            if (text.includes('transform') && (text.includes('none') || !text.includes('scale'))) {
-              reducedMotionDropsTransform = true
-            }
-            if (inner.selectorText.includes(':active') && text.includes('transform: none')) {
+            const selector = inner.selectorText
+            const matchesPressSpecificity =
+              selector.includes(':active') &&
+              selector.includes(':not(:disabled)') &&
+              selector.includes('aria-disabled')
+            if (
+              matchesPressSpecificity &&
+              text.includes('transform') &&
+              text.includes('none') &&
+              !text.includes('scale')
+            ) {
               reducedMotionDropsTransform = true
             }
           }
@@ -98,6 +105,26 @@ test.describe('Chat Shell motion tokens', () => {
     expect(audit.pressableTransition).toContain('background-color')
     expect(audit.pressableTransition).toContain('color')
     expect(audit.pressableTransition.toLowerCase()).not.toContain('all')
+  })
+
+  test('cancels press scale under reduced motion and keeps paint transitions', async ({
+    page,
+  }) => {
+    const { active, idle } = await readPressableMotion(page, 'reduce')
+
+    expect(isIdentityTransform(idle.transform)).toBe(true)
+    expect(idle.transition).toContain('opacity')
+    expect(idle.transition).toContain('color')
+    expect(idle.transition).not.toContain('transform')
+    expect(isIdentityTransform(active.transform)).toBe(true)
+  })
+
+  test('still applies press scale without reduced motion', async ({ page }) => {
+    const { active, idle } = await readPressableMotion(page, 'no-preference')
+
+    expect(isIdentityTransform(idle.transform)).toBe(true)
+    expect(idle.transition).toContain('transform')
+    expect(active.transform).toMatch(/0\.97/)
   })
 
   test('applies press to Show More, Visit Project, and Archive rows', async ({ page }) => {
@@ -247,6 +274,61 @@ test.describe('Chat Shell motion tokens', () => {
     expect(durations.every((value) => value === '0s' || value === '0ms')).toBe(true)
   })
 })
+
+type PressableMotion = {
+  active: { transform: string }
+  idle: { transform: string; transition: string }
+}
+
+function isIdentityTransform(transform: string): boolean {
+  return transform === 'none' || transform === 'matrix(1, 0, 0, 1, 0, 0)'
+}
+
+async function readPressableMotion(
+  page: import('@playwright/test').Page,
+  reducedMotion: 'reduce' | 'no-preference',
+): Promise<PressableMotion> {
+  await page.emulateMedia({ reducedMotion })
+  await page.goto('/')
+
+  const pressable = page.locator('[data-faux-input]')
+  await expect(pressable).toBeVisible()
+
+  const idle = await pressable.evaluate((el) => {
+    const styles = getComputedStyle(el)
+    return {
+      transform: styles.transform,
+      transition: styles.transition.toLowerCase(),
+    }
+  })
+
+  const session = await page.context().newCDPSession(page)
+  await session.send('DOM.enable')
+  await session.send('CSS.enable')
+  const { root } = await session.send('DOM.getDocument', { depth: 0 })
+  const { nodeId } = await session.send('DOM.querySelector', {
+    nodeId: root.nodeId,
+    selector: '[data-faux-input]',
+  })
+  if (!nodeId) throw new Error('Could not resolve Faux Prompt node')
+  await session.send('CSS.forcePseudoState', {
+    nodeId,
+    forcedPseudoClasses: ['active'],
+  })
+
+  if (reducedMotion === 'no-preference') {
+    await page.waitForFunction(() => {
+      const el = document.querySelector('[data-faux-input]')
+      return Boolean(el && /0\.97/.test(getComputedStyle(el).transform))
+    })
+  }
+
+  const active = await pressable.evaluate((el) => ({
+    transform: getComputedStyle(el).transform,
+  }))
+
+  return { active, idle }
+}
 
 type PromptMenuAudit = {
   chevronMs: number | null
